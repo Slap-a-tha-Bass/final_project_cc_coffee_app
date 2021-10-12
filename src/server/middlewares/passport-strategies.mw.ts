@@ -5,7 +5,7 @@ import { Application } from 'express';
 import { compareHash } from '../utils/passwords';
 import { jwtConfig } from '../config';
 import { Users } from '../../../types';
-// import { find_user } from '../db/queries/users';
+import { find_user } from '../db/queries/users';
 
 export const configurePassport = (app: Application) => {
 
@@ -19,12 +19,12 @@ export const configurePassport = (app: Application) => {
         usernameField: 'email'
     }, async (email, password, done) => {
         try {
-            // const [userFound] = await find_user('email', email);
-            // if (!userFound || !compareHash(password, userFound.password)) {
-            //     done(null, false);
-            // } else {
-            //     done(null, userFound);
-            // }
+            const [userFound] = await find_user('email', email);
+            if (!userFound || !compareHash(password, userFound.password)) {
+                done(null, false);
+            } else {
+                done(null, userFound);
+            }
         } catch (error) {
             done(error);
         }

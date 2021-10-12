@@ -28,7 +28,7 @@ export interface Snacks {
     price: number
 }
 export interface Users {
-    id?: number,
+    id?: string,
     full_name?: string,
     email?: string,
     password?: string,
