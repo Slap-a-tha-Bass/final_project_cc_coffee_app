@@ -5,22 +5,31 @@ export interface mysqlResponse {
     insertId: number,
     sqlMessage: string
 }
-export interface Books {
-    id?: number,
-    title?: string,
-    author?: string,
-    categoryid?: number,
+export interface Orders {
+    id?: string,
+    first_name?: string,
+    drink_id?: number,
+    snack_id?: number,
     price?: number,
     _created?: Date,
-    isPreview?: boolean
+    _updated?: Date,
+    isPreview?: boolean,
+    in_progess?: boolean,
+    is_finished?: boolean
 }
-export interface Categories {
+export interface Drinks {
     id: number,
-    name: string
+    name: string,
+    price: number
+}
+export interface Snacks {
+    id: number,
+    name: string,
+    price: number
 }
 export interface Users {
     id?: number,
-    name?: string,
+    full_name?: string,
     email?: string,
     password?: string,
     _created?: Date
