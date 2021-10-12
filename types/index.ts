@@ -14,7 +14,7 @@ export interface Orders {
     _created?: Date,
     _updated?: Date,
     isPreview?: boolean,
-    in_progess?: boolean,
+    in_progress?: boolean,
     is_finished?: boolean
 }
 export interface Drinks {
