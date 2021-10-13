@@ -5,6 +5,9 @@ import { get_orders,
         post_order, 
         edit_order, 
         delete_order } from '../../db/queries/orders';
+import { get_drinks, get_one_drink } from '../../db/queries/drinks';
+import { get_snacks, get_one_snack } from '../../db/queries/snacks';
+
 import { v4 as uuid_v4 } from 'uuid';
 
 const router = express.Router();
@@ -27,11 +30,12 @@ router.get('/:id', async (req, res) => {
     }
 });
 router.post('/', passport.authenticate('jwt'), async (req, res) => {
-    const { first_name, price, drink_id, snack_id, in_progress, is_finished } = req.body;
+    const { first_name, drink_id, snack_id } = req.body;
     try {
         const id = uuid_v4();
-        const newOrder = { id, first_name, price, drink_id, snack_id, in_progress, is_finished };
-        await post_order(newOrder, id);
+        const drinks = await get_one_drink(drink_id);
+        const newOrder = { id, first_name, drink_id, snack_id, price: drinks.price +   };
+        await post_order(newOrder);
         res.json({ message: "Order created!", id});
     } catch (error) {
         res.status(500).json({ message: "Error in server route", error: error.sqlMessage });
@@ -39,8 +43,8 @@ router.post('/', passport.authenticate('jwt'), async (req, res) => {
 });
 router.put('/:id', passport.authenticate('jwt'), async (req, res) => {
     const { id } = req.params;
-    const { first_name, price, drink_id, snack_id, in_progress, is_finished } = req.body;
-    const editOrder = { first_name, price, drink_id, snack_id, in_progress, is_finished };
+    const { first_name, drink_id, snack_id } = req.body;
+    const editOrder = { first_name, drink_id, snack_id };
     try {
         await edit_order(editOrder, id);
         res.json({ message: "Order editted" })
