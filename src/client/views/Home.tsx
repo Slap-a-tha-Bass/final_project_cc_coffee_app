@@ -1,6 +1,7 @@
 import e from 'express';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
+import Swal from 'sweetalert2';
 import { Drinks, Snacks } from '../../../types';
 import { useForm } from '../hooks/useForm';
 import { apiService } from '../utils/api-service';
@@ -20,9 +21,25 @@ const Home = () => {
     }, []);
     const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        apiService('/api/orders', 'POST', { first_name: values.first_name, drink_id: values.drink_id, snack_id: values.snack_id })
-            .then(data => {
-                history.push('/review')});
+        Swal.fire({
+            title: 'Review Order',
+            icon: 'info',
+            text: 'Please check to make sure everything looks good',
+            showConfirmButton: true,
+            confirmButtonText: 'Looks good!',
+            showDenyButton: true,
+            denyButtonText: 'Lemme double check!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                apiService('/api/orders', 'POST', { first_name: values.first_name, drink_id: values.drink_id, snack_id: values.snack_id })
+                    .then(data => {
+                        history.push('/review')
+                    });
+            } else if (result.isDenied) {
+                return;
+            }
+        })
+
     }
     return (
         <>
