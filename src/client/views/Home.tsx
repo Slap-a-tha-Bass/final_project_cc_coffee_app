@@ -32,9 +32,7 @@ const Home = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 apiService('/api/orders', 'POST', { first_name: values.first_name, drink_id: values.drink_id, snack_id: values.snack_id })
-                    .then(data => {
-                        history.push('/review')
-                    });
+                    .then(() => history.push(`/orders`));
             } else if (result.isDenied) {
                 return;
             }
