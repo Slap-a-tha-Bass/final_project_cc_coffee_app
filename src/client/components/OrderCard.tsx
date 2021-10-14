@@ -21,6 +21,7 @@ const OrderCard = ({ id, first_name, drink_id, snack_id, price, isPreview, in_pr
         Swal.fire({
             title: `${first_name}'s order received!`,
             icon: 'success',
+            iconColor: '#4b0492f6',
             timer: 2000,
             showConfirmButton: false
         });
@@ -30,10 +31,32 @@ const OrderCard = ({ id, first_name, drink_id, snack_id, price, isPreview, in_pr
         Swal.fire({
             title: `${first_name}'s order completed!`,
             icon: 'success',
+            iconColor: '#4b0492f6',
             timer: 2000,
             showConfirmButton: false
         });
-        history.push(`/orders/${id}`);
+        history.push(`/orders/`);
+    }
+    const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+        Swal.fire({
+            title: 'Delete Order?',
+            icon: 'warning',
+            iconColor: '#4b0492f6',
+            text: `Are you sure you want to delete ${first_name}'s order?`,
+            showConfirmButton: true,
+            confirmButtonText: 'Yes, I am sure!',
+            confirmButtonColor: '#4b0492f6',
+            showDenyButton: true,
+            denyButtonText: 'Actually, no!',
+            denyButtonColor: '#ff0000'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                apiService(`/api/orders/${id}`, 'DELETE', { first_name, drink_id, snack_id })
+                    .then(() => history.push('/orders'));
+            } else if (result.isDenied) {
+                return;
+            }
+        })
     }
     return (
         <div className="card bg-info p-2 border rounded shadow my-2">
@@ -44,9 +67,9 @@ const OrderCard = ({ id, first_name, drink_id, snack_id, price, isPreview, in_pr
                 <h5 className="card-text text-center text-light">${price}</h5>
             </div>
             <div className="d-flex justify-content-around">
-                {isPreview && <Link className="btn btn-primary btn-sm text-info border border-light d-flex align-items-center" to={`/edit/${id}`}>edit</Link>}
-                {isPreview && <button className="btn btn-primary btn-sm text-info border border-light d-flex align-items-center">delete</button>}
-                {is_finished && <button className="btn btn-info btn-lg" onClick={handleOrderComplete}><i className="bi bi-arrow-right-circle-fill"></i></button>}
+                {isPreview && <Link className="btn btn-primary btn-sm text-info border border-info d-flex align-items-center rounded-pill" to={`/edit/${id}`}>edit</Link>}
+                {isPreview && <button onClick={handleDelete} className="btn btn-primary btn-sm text-info border border-info d-flex align-items-center rounded-pill">delete</button>}
+                {is_finished && <button className="btn btn-info btn-lg rounded-pill" onClick={handleOrderComplete}><i className="bi bi-arrow-right-circle-fill"></i></button>}
             </div>
             <div className="d-flex justify-content-end">
                 {in_progress && <button className="btn btn-info btn-lg" onClick={handleViewOrder}><i className="bi bi-arrow-right-circle-fill"></i></button>}

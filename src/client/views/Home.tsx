@@ -24,11 +24,14 @@ const Home = () => {
         Swal.fire({
             title: 'Review Order',
             icon: 'info',
+            iconColor: '#4b0492f6',
             text: 'Please check to make sure everything looks good',
             showConfirmButton: true,
             confirmButtonText: 'Looks good!',
+            confirmButtonColor: '#4b0492f6',
             showDenyButton: true,
-            denyButtonText: 'Lemme double check!'
+            denyButtonText: 'Lemme double check!',
+            denyButtonColor: '#ff0000'
         }).then((result) => {
             if (result.isConfirmed) {
                 apiService('/api/orders', 'POST', { first_name: values.first_name, drink_id: values.drink_id, snack_id: values.snack_id })
@@ -39,38 +42,57 @@ const Home = () => {
         })
 
     }
+    let disabledBtn = false;
+    if (!values.first_name || !values.drink_id || !values.snack_id) {
+        disabledBtn = true;
+    }
+    const selectDrinkField = <select className="form-select" name="drink_id" value={values.drink_id || ''} onChange={handleChanges}>
+        <option value="0">nothing chosen...</option>
+        {drinks.map((values) => (
+            <option value={values.id} key={values.id}>
+                {values.name}
+            </option>
+        ))}
+        </select>
+    let newSelectDrinkField = null;
+
+    const handleNewClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        newSelectDrinkField = <div>{selectDrinkField}</div>;
+    }
     return (
         <>
             <h1 className="text-info text-center display-3"><i className="bi bi-cup-fill"></i> c^2 coffee <i className="bi bi-cup-fill"></i></h1>
             <form className="form-group bg-info border rounded p-2">
                 <label htmlFor="first_name" className="text-light mt-2 h3"><i className="bi bi-braces"></i></label>
-                <input
-                    name="first_name"
-                    placeholder="Name"
-                    value={values.first_name || ''}
-                    onChange={handleChanges}
-                    type="text"
-                    className="form-control" />
+                <div className="d-flex justify-content-between">
+                    <input
+                        name="first_name"
+                        placeholder="Name"
+                        value={values.first_name || ''}
+                        onChange={handleChanges}
+                        type="text"
+                        className="form-control" />
+                </div>
                 <label htmlFor="email" className="text-light mt-2 h3"><i className="bi bi-cup-fill"></i></label>
-                <select className="form-select" name="drink_id" value={values.drink_id || ''} onChange={handleChanges}>
-                    <option value="0">nothing chosen...</option>
-                    {drinks.map((values) => (
-                        <option value={values.id} key={values.id}>
-                            {values.name}
-                        </option>
-                    ))}
-                </select>
+                <div className="d-flex justify-content-between">
+                    {selectDrinkField}
+                    <button onClick={handleNewClick} className="btn btn-info"><i className="bi bi-plus-circle"></i></button>
+                </div>
+                    {newSelectDrinkField}
                 <label htmlFor="password" className="text-light mt-2 h3"><i className="bi bi-palette-fill"></i></label>
-                <select className="form-select" name="snack_id" value={values.snack_id || ''} onChange={handleChanges}>
-                    <option value="0" className="text-muted">nothing chosen...</option>
-                    {snacks.map((values) => (
-                        <option value={values.id} key={values.id}>
-                            {values.name}
-                        </option>
-                    ))}
-                </select>
+                <div className="d-flex justify-content-between">
+                    <select className="form-select" name="snack_id" value={values.snack_id || ''} onChange={handleChanges}>
+                        <option value="0" className="text-muted">nothing chosen...</option>
+                        {snacks.map((values) => (
+                            <option value={values.id} key={values.id}>
+                                {values.name}
+                            </option>
+                        ))}
+                    </select>
+                    <button className="btn btn-info"><i className="bi bi-plus-circle"></i></button>
+                </div>
                 <div className="d-flex justify-content-center mt-2">
-                    <button onClick={handleSubmit} className="btn btn-primary text-info font-weight-bolder border border-light">review order</button>
+                    <button onClick={handleSubmit} disabled={disabledBtn} className="btn btn-primary text-info font-weight-bolder border border-info btn-sm rounded-pill">review</button>
                 </div>
             </form >
         </>

@@ -5,6 +5,7 @@ import { apiService } from '../utils/api-service';
 
 const Orders = () => {
     const [orders, setOrders] = useState<Orders[]>([]);
+    
     useEffect(() => {
         apiService('/api/orders')
             .then(data => setOrders(data));

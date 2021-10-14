@@ -16,14 +16,14 @@ const Login = () => {
     }
     return (
         <form className="form-group bg-info border rounded p-2">
-            <label htmlFor="email" className="text-light">Email</label>
+            <label htmlFor="email" className="text-light">email</label>
             <input
                 name="email"
                 value={values.email}
                 onChange={handleChanges}
                 type="email"
                 className="form-control" />
-            <label htmlFor="password" className="text-light">Password</label>
+            <label htmlFor="password" className="text-light">password</label>
             <input
                 name="password"
                 value={values.password}
@@ -31,7 +31,7 @@ const Login = () => {
                 type="password"
                 className="form-control" />
             <div className="d-flex justify-content-center">
-                <button onClick={handleLogin} className="btn btn-info">Login</button>
+                <button onClick={handleLogin} className="btn btn-info">login</button>
             </div>
         </form>
     )
