@@ -13,6 +13,7 @@ import Profile from './views/Profile';
 import Register from './views/Register';
 import ViewOrder from './views/ViewOrder';
 import Twitter from './views/social_media/Twitter';
+import HomeBar from './views/HomeBar';
 
 
 const App = (props: AppProps) => {
@@ -24,6 +25,9 @@ const App = (props: AppProps) => {
 				<Switch>
 					<Route exact path="/">
 						<Home />
+					</Route>
+					<Route exact path="/homebar">
+						<HomeBar />
 					</Route>
 					<Route exact path="/placeorder">
 						<PlaceOrder />

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 const AboutUs = () => {
     return (
         <>
-            <div className="d-flex justify-content-center">
+            <div className="d-flex justify-content-center position-relative">
                 <div className="card bg-info text-light mt-2">
                     <h3 className="card-title text-center display-4">about us</h3>
                     <div className="card-body">

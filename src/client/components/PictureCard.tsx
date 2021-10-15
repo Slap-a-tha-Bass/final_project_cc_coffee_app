@@ -21,6 +21,6 @@ const PictureCard = (props: IPictureCardProps) => {
     )
 }
 interface IPictureCardProps {
-
+    
 }
 export default PictureCard;
