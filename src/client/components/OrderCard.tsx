@@ -67,12 +67,12 @@ const OrderCard = ({ id, first_name, drink_id, snack_id, price, isPreview, in_pr
                 <h5 className="card-text text-center text-light">${price}</h5>
             </div>
             <div className="d-flex justify-content-around">
-                {isPreview && <Link className="btn btn-primary btn-sm text-info border border-info d-flex align-items-center rounded-pill" to={`/edit/${id}`}>edit</Link>}
-                {isPreview && <button onClick={handleDelete} className="btn btn-primary btn-sm text-info border border-info d-flex align-items-center rounded-pill">delete</button>}
+                {isPreview && <Link className="btn btn-info btn-lg rounded-pill" to={`/edit/${id}`}><i className="bi bi-pencil-fill"></i></Link>}
+                {isPreview && <button onClick={handleDelete} className="btn btn-info btn-lg rounded-pill"><i className="bi bi-x-circle-fill"></i></button>}
                 {is_finished && <button className="btn btn-info btn-lg rounded-pill" onClick={handleOrderComplete}><i className="bi bi-arrow-right-circle-fill"></i></button>}
             </div>
             <div className="d-flex justify-content-end">
-                {in_progress && <button className="btn btn-info btn-lg" onClick={handleViewOrder}><i className="bi bi-arrow-right-circle-fill"></i></button>}
+                {in_progress && <button className="btn btn-info rounded-pill btn-lg" onClick={handleViewOrder}><i className="bi bi-arrow-right-circle-fill"></i></button>}
             </div>
         </div>
     )
