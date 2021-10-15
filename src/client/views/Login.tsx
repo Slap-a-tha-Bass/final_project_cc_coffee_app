@@ -1,5 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 import { useForm } from '../hooks/useForm';
 import { apiService } from '../utils/api-service';
 
@@ -36,6 +37,8 @@ const Login = () => {
                     <button onClick={handleLogin} className="btn btn-info">login</button>
                 </div>
             </form>
+            <h3 className="text-light mt-3">Not a member?</h3>
+            <Link to="/register" className="btn btn-info btn-lg text-light mt-2">Register here</Link>
         </>
     )
 }
