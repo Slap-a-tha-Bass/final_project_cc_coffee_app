@@ -1,6 +1,7 @@
 import React from 'react';
-import { useHistory } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import { useForm } from '../hooks/useForm';
 import { apiService } from '../utils/api-service';
 
@@ -15,6 +16,22 @@ const Login = () => {
                 history.push('/profile');
             })
     }
+    const TOKEN = localStorage.getItem('token');
+    if (TOKEN) {
+        Swal.fire({
+            position: 'top',
+            title: 'Already logged in!',
+            icon: 'error',
+            iconColor: '#4b0492f6',
+            timer: 1000,
+            showConfirmButton: false
+        })
+        return <Redirect to="/orders" />;
+    }
+    let disabledBtn = false;
+    if (!values.email || !values.password) {
+        disabledBtn = true;
+    }
     return (
         <>
             <h1 className="text-light mt-3 text-center display-4"><i className="bi bi-cup-fill"></i> login </h1>
@@ -22,19 +39,19 @@ const Login = () => {
                 <label htmlFor="email" className="text-light">email</label>
                 <input
                     name="email"
-                    value={values.email}
+                    value={values.email || ''}
                     onChange={handleChanges}
                     type="email"
                     className="form-control" />
                 <label htmlFor="password" className="text-light">password</label>
                 <input
                     name="password"
-                    value={values.password}
+                    value={values.password || ''}
                     onChange={handleChanges}
                     type="password"
                     className="form-control" />
                 <div className="d-flex justify-content-center">
-                    <button onClick={handleLogin} className="btn btn-info">login</button>
+                    <button onClick={handleLogin} disabled={disabledBtn} className="btn btn-info btn-lg mt-2"><i className="bi bi-arrow-right-circle-fill"></i></button>
                 </div>
             </form>
             <h3 className="text-light mt-3">Not a member?</h3>

@@ -35,7 +35,7 @@ const PlaceOrder = () => {
             denyButtonColor: '#ff0000'
         }).then((result) => {
             if (result.isConfirmed) {
-                apiService('/api/orders', 'POST', { first_name: values.first_name, drink_id: values.drink_id && values.drink2_id, snack_id: values.snack_id })
+                apiService('/api/orders', 'POST', { first_name: values.first_name, drink_id: values.drink_id, snack_id: values.snack_id })
                     .then(() => history.push(`/orders`));
             } else if (result.isDenied) {
                 return;
@@ -47,19 +47,19 @@ const PlaceOrder = () => {
     if (!values.first_name || !values.drink_id || !values.snack_id) {
         disabledBtn = true;
     }
-    let selectDrinkField = <select className="form-select" name="drink2_id" value={values.drink2_id || ''} onChange={handleChanges}>
-        <option value="0">nothing chosen...</option>
-        {drinks.map((values) => (
-            <option value={values.id} key={values.id}>
-                {values.name}
-            </option>
-        ))}
-    </select>
+    // let selectDrinkField = <select className="form-select" name="drink2_id" value={values.drink2_id || ''} onChange={handleChanges}>
+    //     <option value="0">nothing chosen...</option>
+    //     {drinks.map((values) => (
+    //         <option value={values.id} key={values.id}>
+    //             {values.name}
+    //         </option>
+    //     ))}
+    // </select>
 
-    const handleNewClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        setNewDrinkSelect(true);
-    }
+    // const handleNewClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    //     e.preventDefault();
+    //     setNewDrinkSelect(true);
+    // }
     return (
         <>
             <h1 className="text-light text-center display-4 mt-3"><i className="bi bi-cup-fill"></i> c^2 coffee </h1>
@@ -80,12 +80,11 @@ const PlaceOrder = () => {
                         <option value="0">nothing chosen...</option>
                         {drinks.map((values) => (
                             <option value={values.id} key={values.id}>
-                                {values.name}
+                                {values.name}  ${values.price}
                             </option>
                         ))}
                     </select>
-                    {newDrinkSelect && selectDrinkField}
-                    <button onClick={handleNewClick} className="btn btn-info"><i className="bi bi-plus-circle"></i></button>
+                    {/* <button onClick={handleNewClick} className="btn btn-info"><i className="bi bi-plus-circle"></i></button> */}
                 </div>
                 <label htmlFor="password" className="text-light mt-2 h3"><i className="bi bi-palette-fill"></i></label>
                 <div className="d-flex justify-content-between">
@@ -93,11 +92,11 @@ const PlaceOrder = () => {
                         <option value="0" className="text-muted">nothing chosen...</option>
                         {snacks.map((values) => (
                             <option value={values.id} key={values.id}>
-                                {values.name}
+                                {values.name}  ${values.price}
                             </option>
                         ))}
                     </select>
-                    <button className="btn btn-info"><i className="bi bi-plus-circle"></i></button>
+                    {/* <button className="btn btn-info"><i className="bi bi-plus-circle"></i></button> */}
                 </div>
                 <div className="d-flex justify-content-center mt-2">
                     <button onClick={handleSubmit} disabled={disabledBtn} className="btn btn-info btn-lg rounded-pill"><i className="bi bi-arrow-right-circle-fill"></i></button>

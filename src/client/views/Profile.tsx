@@ -11,7 +11,7 @@ const Profile = () => {
     }, []);
     return (
         <div className="card bg-info rounded mt-2">
-            <h1 className="card-title px-2">{user}</h1>
+            <h1 className="card-title text-light p-3">{user}</h1>
             <div className="card-body d-flex justify-content-center">
                 <Link to="/" className="btn btn-info btn-lg">
                     <i className="bi bi-arrow-right-circle-fill"></i>

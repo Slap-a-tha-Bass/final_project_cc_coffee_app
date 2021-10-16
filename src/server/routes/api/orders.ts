@@ -5,10 +5,11 @@ import { get_orders,
         post_order, 
         edit_order, 
         delete_order } from '../../db/queries/orders';
-import { get_drinks, get_one_drink } from '../../db/queries/drinks';
-import { get_snacks, get_one_snack } from '../../db/queries/snacks';
+import { get_one_drink } from '../../db/queries/drinks';
+
 
 import { v4 as uuid_v4 } from 'uuid';
+import { get_one_snack } from '../../db/queries/snacks';
 
 const router = express.Router();
 
@@ -34,8 +35,8 @@ router.post('/', passport.authenticate('jwt'), async (req, res) => {
     try {
         const id = uuid_v4();
         const [drink] = await get_one_drink(drink_id);
-        const [snack] = await get_one_drink(snack_id);
-        const newOrder = { id, first_name, drink_id, snack_id, price: (drink.price + snack.price) + (0.10*(drink.price + snack.price)) };
+        const [snack] = await get_one_snack(snack_id);
+        const newOrder = { id, first_name, drink_id: drink_id, snack_id: snack_id, price: (drink.price + snack.price) + (0.10*(drink.price + snack.price) + 0.00) };
         await post_order(newOrder);
         res.json({ message: "Order created!", id});
     } catch (error) {

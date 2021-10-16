@@ -3,7 +3,7 @@ import React from 'react';
 const PictureCard = (props: IPictureCardProps) => {
     return (
         <>
-            <div className="d-flex justify-content-center">
+            <div>
                 <div className="card border border-info mt-2 d-inline-block">
                     <div className="card-body bg-info">
                         <p className="card-text text-center text-light h1"><i className="bi bi-cup-fill"></i> welcome to c^2 coffee</p>

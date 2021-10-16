@@ -16,6 +16,9 @@ const AboutUs = () => {
                             <li className="list-group-item text-light h4 bg-info">Disturbed but not broken</li>
                         </ul>
                         <div className="d-flex justify-content-md-around">
+                            <Link target="_blank" className="btn btn-outline-light bg-info border border-info btn-lg rounded mx-2" to="/github">
+                                <i className="bi bi-github"></i>
+                            </Link>
                             <Link target="_blank" className="btn btn-outline-light bg-info border border-info btn-lg rounded mx-2" to="/facebook">
                                 <i className="bi bi-facebook"></i>
                             </Link>
