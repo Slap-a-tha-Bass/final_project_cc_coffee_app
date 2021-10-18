@@ -14,6 +14,7 @@ import Register from './views/Register';
 import ViewOrder from './views/ViewOrder';
 import Twitter from './views/social_media/Twitter';
 import Github from './views/social_media/Github';
+import EditOrder from './views/EditOrder';
 
 const App = (props: AppProps) => {
 
@@ -33,6 +34,9 @@ const App = (props: AppProps) => {
 					</PrivateRoute>
 					<Route exact path="/orders/:id">
 						<ViewOrder />
+					</Route>
+					<Route exact path="/edit/:id">
+						<EditOrder />
 					</Route>
 					<Route exact path="/login">
 						<Login />
