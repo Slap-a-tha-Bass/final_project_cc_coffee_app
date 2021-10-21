@@ -36,7 +36,7 @@ router.post('/', passport.authenticate('jwt'), async (req, res) => {
         const id = uuid_v4();
         const [drink] = await get_one_drink(drink_id);
         const [snack] = await get_one_snack(snack_id);
-        const newOrder = { id, first_name, drink_id: drink_id, snack_id: snack_id, price: (drink.price + snack.price) + (0.10*(drink.price + snack.price) + 0.00) };
+        const newOrder = { id, first_name, drink_id: drink_id, snack_id: snack_id, price: (drink.price + snack.price) + (0.09*(drink.price + snack.price) + 0.00) };
         await post_order(newOrder);
         res.json({ message: "Order created!", id});
     } catch (error) {

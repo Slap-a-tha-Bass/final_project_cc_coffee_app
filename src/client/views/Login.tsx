@@ -19,7 +19,6 @@ const Login = () => {
     const TOKEN = localStorage.getItem('token');
     if (TOKEN) {
         Swal.fire({
-            position: 'top',
             title: 'Already logged in!',
             icon: 'error',
             iconColor: '#4b0492f6',

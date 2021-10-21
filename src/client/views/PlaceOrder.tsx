@@ -10,7 +10,6 @@ const PlaceOrder = () => {
     const { values, handleChanges } = useForm();
     const [drinks, setDrinks] = useState<Drinks[]>([]);
     const [snacks, setSnacks] = useState<Snacks[]>([]);
-    const [newDrinkSelect, setNewDrinkSelect] = useState(false);
 
     useEffect(() => {
         apiService('/api/drinks')
@@ -47,19 +46,7 @@ const PlaceOrder = () => {
     if (!values.first_name || !values.drink_id || !values.snack_id) {
         disabledBtn = true;
     }
-    // let selectDrinkField = <select className="form-select" name="drink2_id" value={values.drink2_id || ''} onChange={handleChanges}>
-    //     <option value="0">nothing chosen...</option>
-    //     {drinks.map((values) => (
-    //         <option value={values.id} key={values.id}>
-    //             {values.name}
-    //         </option>
-    //     ))}
-    // </select>
 
-    // const handleNewClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    //     e.preventDefault();
-    //     setNewDrinkSelect(true);
-    // }
     return (
         <>
             <h1 className="text-light text-center display-4 mt-3"><i className="bi bi-cup-fill"></i> c^2 coffee </h1>
