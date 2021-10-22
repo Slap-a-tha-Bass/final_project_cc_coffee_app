@@ -1,5 +1,4 @@
 import * as express from 'express';
-import * as passport from 'passport';
 import Stripe from 'stripe';
 import { stripeConfig } from '../../config';
 
@@ -16,7 +15,8 @@ router.post('/', async(req,res) => {
             confirm: true,
             payment_method: paymentMethod.id
         });
-        res.json(paymentFulfilled);
+        const receiptURL = paymentFulfilled.charges.data[0].receipt_url;
+        res.json(receiptURL);
     } catch (error) {
         res.status(500).json({ message: "Error posting payment", error: error.sqlMessage});
     }

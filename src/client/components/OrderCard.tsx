@@ -35,7 +35,7 @@ const OrderCard = ({ id, first_name, drink_id, snack_id, price, isPreview, in_pr
             timer: 2000,
             showConfirmButton: false
         });
-        history.push(`/payment`);
+        history.push(`/orders/${id}/payment`);
     }
     const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
         Swal.fire({
