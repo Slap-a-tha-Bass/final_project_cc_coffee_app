@@ -37,3 +37,10 @@ export interface Users {
 export interface ReqUsers extends Request {
     user?: Users
 }
+export interface PaymentProps {
+    id: string,
+    fullName: string,
+    amount: number,
+    tip: number,
+    subtotal: number
+}

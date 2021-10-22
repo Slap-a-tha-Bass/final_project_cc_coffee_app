@@ -37,7 +37,6 @@ const PlaceOrder = () => {
             if (result.isConfirmed) {
                 apiService('/api/orders', 'POST', { first_name: values.first_name, drink_id: values.drink_id, snack_id: values.snack_id })
                     .then(values => {
-                        setDrinkInputs(values),
                         console.log(values),
                         console.log(drinkInputs),
                         history.push(`/orders`)
@@ -62,6 +61,7 @@ const PlaceOrder = () => {
             </select>
     const handleDrinkInput = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
+        // setDrinkInputs(prev => setDrinkInputs([...prev, values]))
         drinkInputs.map(values => (
             {drinkSelect}
         ))

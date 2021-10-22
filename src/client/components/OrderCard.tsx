@@ -29,13 +29,13 @@ const OrderCard = ({ id, first_name, drink_id, snack_id, price, isPreview, in_pr
     }
     const handleOrderComplete = (e: React.MouseEvent<HTMLButtonElement>) => {
         Swal.fire({
-            title: `${first_name}'s order completed!`,
+            title: `${first_name}'s order ready for payment!`,
             icon: 'success',
             iconColor: '#4b0492f6',
             timer: 2000,
             showConfirmButton: false
         });
-        history.push(`/orders/`);
+        history.push(`/payment`);
     }
     const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
         Swal.fire({
