@@ -36,7 +36,7 @@ router.post('/', passport.authenticate('jwt'), async (req, res) => {
         const id = uuid_v4();
         const [drink] = await get_one_drink(drink_id);
         const [snack] = await get_one_snack(snack_id);
-        const newOrder = { id, first_name, drink_id: drink_id, snack_id: snack_id, price: (drink.price + snack.price) + (0.09*(drink.price + snack.price) + 0.00) };
+        const newOrder = { id, first_name, drink_id: drink_id, snack_id: snack_id, price: (drink.price + snack.price) + (0.09*(drink.price + snack.price)) };
         await post_order(newOrder);
         res.json({ message: "Order created!", id});
     } catch (error) {
@@ -46,8 +46,10 @@ router.post('/', passport.authenticate('jwt'), async (req, res) => {
 router.put('/:id', passport.authenticate('jwt'), async (req, res) => {
     const { id } = req.params;
     const { first_name, drink_id, snack_id } = req.body;
-    const editOrder = { first_name, drink_id, snack_id };
     try {
+        const [drink] = await get_one_drink(drink_id);
+        const [snack] = await get_one_snack(snack_id);
+        const editOrder = { first_name, drink_id: drink_id, snack_id: snack_id, price: (drink.price + snack.price) + (0.09*(drink.price + snack.price)) };
         await edit_order(editOrder, id);
         res.json({ message: "Order editted" })
     } catch (error) {

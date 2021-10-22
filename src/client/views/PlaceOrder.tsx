@@ -10,6 +10,7 @@ const PlaceOrder = () => {
     const { values, handleChanges } = useForm();
     const [drinks, setDrinks] = useState<Drinks[]>([]);
     const [snacks, setSnacks] = useState<Snacks[]>([]);
+    const [drinkInputs, setDrinkInputs] = useState([]);
 
     useEffect(() => {
         apiService('/api/drinks')
@@ -35,7 +36,12 @@ const PlaceOrder = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 apiService('/api/orders', 'POST', { first_name: values.first_name, drink_id: values.drink_id, snack_id: values.snack_id })
-                    .then(() => history.push(`/orders`));
+                    .then(values => {
+                        setDrinkInputs(values),
+                        console.log(values),
+                        console.log(drinkInputs),
+                        history.push(`/orders`)
+                    });
             } else if (result.isDenied) {
                 return;
             }
@@ -46,7 +52,20 @@ const PlaceOrder = () => {
     if (!values.first_name || !values.drink_id || !values.snack_id) {
         disabledBtn = true;
     }
-
+    const drinkSelect = <select className="form-select" name="drink_id" value={values.drink_id || ''} onChange={handleChanges}>
+                <option value="0">nothing chosen...</option>
+                    {drinks.map((values) => (
+                    <option value={values.id} key={values.id}>
+                        {values.name}  ${values.price}
+                    </option>
+                    ))}
+            </select>
+    const handleDrinkInput = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        drinkInputs.map(values => (
+            {drinkSelect}
+        ))
+    }
     return (
         <>
             <h1 className="text-light text-center display-4 mt-3"><i className="bi bi-cup-fill"></i> c^2 coffee </h1>
@@ -63,15 +82,8 @@ const PlaceOrder = () => {
                 </div>
                 <label htmlFor="email" className="text-light mt-2 h3"><i className="bi bi-cup-fill"></i></label>
                 <div className="d-flex justify-content-between">
-                    <select className="form-select" name="drink_id" value={values.drink_id || ''} onChange={handleChanges}>
-                        <option value="0">nothing chosen...</option>
-                        {drinks.map((values) => (
-                            <option value={values.id} key={values.id}>
-                                {values.name}  ${values.price}
-                            </option>
-                        ))}
-                    </select>
-                    {/* <button onClick={handleNewClick} className="btn btn-info"><i className="bi bi-plus-circle"></i></button> */}
+                    {drinkSelect}
+                    <button onClick={handleDrinkInput} className="btn btn-info"><i className="bi bi-plus-circle-fill"></i></button>
                 </div>
                 <label htmlFor="password" className="text-light mt-2 h3"><i className="bi bi-palette-fill"></i></label>
                 <div className="d-flex justify-content-between">
@@ -83,7 +95,6 @@ const PlaceOrder = () => {
                             </option>
                         ))}
                     </select>
-                    {/* <button className="btn btn-info"><i className="bi bi-plus-circle"></i></button> */}
                 </div>
                 <div className="d-flex justify-content-center mt-2">
                     <button onClick={handleSubmit} disabled={disabledBtn} className="btn btn-info btn-lg rounded-pill"><i className="bi bi-arrow-right-circle-fill"></i></button>
