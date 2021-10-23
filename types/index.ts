@@ -8,8 +8,6 @@ export interface mysqlResponse {
 export interface Orders {
     id?: string,
     first_name?: string,
-    drink_id?: number,
-    snack_id?: number,
     price?: number,
     _created?: Date,
     _updated?: Date,
@@ -22,10 +20,22 @@ export interface Drinks {
     name: string,
     price: number
 }
+export interface DrinksOrder {
+    id: number,
+    drink_id: number,
+    price: number,
+    order_id: string
+}
 export interface Snacks {
     id: number,
     name: string,
     price: number
+}
+export interface SnacksOrder {
+    id: number,
+    drink_id: number,
+    price: number,
+    order_id: string
 }
 export interface Users {
     id?: string,

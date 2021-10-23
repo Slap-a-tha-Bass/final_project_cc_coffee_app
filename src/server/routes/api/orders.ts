@@ -30,13 +30,13 @@ router.get('/:id', async (req, res) => {
         res.status(500).json({ message: "Error in server route", error: error.sqlMessage });
     }
 });
-router.post('/', passport.authenticate('jwt'), async (req, res) => {
-    const { first_name, drink_id, snack_id } = req.body;
+router.post('/',  async (req, res) => {
+    const { first_name } = req.body;
     try {
         const id = uuid_v4();
-        const [drink] = await get_one_drink(drink_id);
-        const [snack] = await get_one_snack(snack_id);
-        const newOrder = { id, first_name, drink_id: drink_id, snack_id: snack_id, price: (drink.price + snack.price) + (0.09*(drink.price + snack.price)) };
+        // const newOrder = { id, first_name, drink_id: drink_id, snack_id: snack_id, price: (drink.price + snack.price) + (0.09*(drink.price + snack.price)) };
+        // await post_order(newOrder);
+        const newOrder = {id, first_name};
         await post_order(newOrder);
         res.json({ message: "Order created!", id});
     } catch (error) {
