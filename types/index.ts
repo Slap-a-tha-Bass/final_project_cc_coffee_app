@@ -16,26 +16,26 @@ export interface Orders {
     is_finished?: boolean
 }
 export interface Drinks {
-    id: number,
-    name: string,
-    price: number
+    id?: number,
+    name?: string,
+    price?: number
 }
 export interface DrinksOrder {
-    id: number,
-    drink_id: number,
-    price: number,
-    order_id: string
+    id?: number,
+    drink_id?: number,
+    price?: number,
+    order_id?: string
 }
 export interface Snacks {
-    id: number,
-    name: string,
-    price: number
+    id?: number,
+    name?: string,
+    price?: number
 }
 export interface SnacksOrder {
-    id: number,
-    drink_id: number,
-    price: number,
-    order_id: string
+    id?: number,
+    drink_id?: number,
+    price?: number,
+    order_id?: string
 }
 export interface Users {
     id?: string,
