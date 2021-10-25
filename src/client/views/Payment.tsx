@@ -12,7 +12,6 @@ const Payment = () => {
     const [fullName, setFullName] = useState<PaymentProps['fullName']>('');
     const [amount, setAmount] = useState<PaymentProps['amount']>();
     const [tip, setTip] = useState<PaymentProps['tip']>();
-    const [subtotal, setSubtotal] = useState<PaymentProps['subtotal']>();
     const [hasLoaded, setHasLoaded] = useState(false);
 
 
@@ -38,16 +37,16 @@ const Payment = () => {
             denyButtonColor: '#ff0000',
             denyButtonText: 'Cancel'
         }).then(async(results) => {
-            if (error) {
-                console.log(error);
-                return;
-            } else if (results.isConfirmed) {
-                const received = await apiService('/api/payment', 'POST', { amount: Number(values.subtotal) || Number(values.price) + Number(values.tip), paymentMethod });
+            if (results.isConfirmed) {
+                const received = await apiService('/api/payment', 'POST', { amount: (Number(values.subtotal) || Number(values.price) || 0 )+ Number(values.tip), paymentMethod });
                 console.log(received);
             } else if (results.isDenied){
                 return;
             }
-        })
+        }).catch((error) => {
+            console.log(error);
+        });
+        
         const { error, paymentMethod } = await stripe.createPaymentMethod({
             type: 'card',
             card: cardData,
@@ -55,6 +54,7 @@ const Payment = () => {
                 name: fullName
             }
         });
+        console.log(error);
         console.log(paymentMethod)
     }
     let disabledBtn = false;

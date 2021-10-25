@@ -16,7 +16,7 @@ router.post('/', async(req,res) => {
             payment_method: paymentMethod.id
         });
         const receiptURL = paymentFulfilled.charges.data[0].receipt_url;
-        res.json(receiptURL);
+        res.json({receiptURL});
     } catch (error) {
         res.status(500).json({ message: "Error posting payment", error: error.sqlMessage});
     }

@@ -9,6 +9,8 @@ export interface Orders {
     id?: string,
     first_name?: string,
     price?: number,
+    drink_id?: number,
+    snack_id?: number,
     _created?: Date,
     _updated?: Date,
     isPreview?: boolean,
@@ -33,7 +35,7 @@ export interface Snacks {
 }
 export interface SnacksOrder {
     id?: number,
-    drink_id?: number,
+    snack_id?: number,
     price?: number,
     order_id?: string
 }
