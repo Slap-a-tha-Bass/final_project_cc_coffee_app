@@ -13,7 +13,7 @@ import { get_one_drink } from '../../db/queries/drinks';
 import { v4 as uuid_v4 } from 'uuid';
 import { get_one_snack } from '../../db/queries/snacks';
 import { post_drinksorder } from '../../db/queries/drinksorder';
-import { post_snacksOrder } from '../../db/queries/snacksorder';
+import { post_snacksorder } from '../../db/queries/snacksorder';
 
 const router = express.Router();
 
@@ -47,7 +47,7 @@ router.post('/', async (req, res) => {
         }
         for await (const snack_id of snack_ids){
             const snacksOrder = { snack_id, order_id: id };
-            await post_snacksOrder(snacksOrder);
+            await post_snacksorder(snacksOrder);
         }
 
         res.json({ message: "Order created!", id });

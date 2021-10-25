@@ -8,15 +8,15 @@ const OrderCard = ({ id, first_name, drink_id, snack_id, price, isPreview, in_pr
     const history = useHistory();
     const [drink_name, setDrink_name] = useState<Drinks['name']>('');
     const [snack_name, setSnack_name] = useState<Snacks['name']>('');
-
+    const order_id = id;
     useEffect(() => {
-        apiService(`/api/drinks/${drink_id || ''}`)
+        apiService(`/api/drinksorder/${order_id}`)
             .then(data => setDrink_name(data.name));
-    }, [drink_id]);
+    }, [order_id]);
     useEffect(() => {
-        apiService(`/api/snacks/${snack_id || ''}`)
+        apiService(`/api/snacksorder/${order_id}`)
             .then(data => setSnack_name(data.name));
-    }, [snack_id]);
+    }, [order_id]);
     const handleViewOrder = (e: React.MouseEvent<HTMLButtonElement>) => {
         Swal.fire({
             title: `${first_name}'s order received!`,

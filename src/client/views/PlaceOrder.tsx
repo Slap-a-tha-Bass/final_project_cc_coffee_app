@@ -10,7 +10,6 @@ const PlaceOrder = () => {
     const { values, handleChanges } = useForm();
     const [drinks, setDrinks] = useState<Drinks[]>([]);
     const [snacks, setSnacks] = useState<Snacks[]>([]);
-    const [drinkInputs, setDrinkInputs] = useState([]);
 
     useEffect(() => {
         apiService('/api/drinks')
@@ -35,10 +34,9 @@ const PlaceOrder = () => {
             denyButtonColor: '#ff0000'
         }).then((result) => {
             if (result.isConfirmed) {
-                apiService('/api/orders', 'POST', { first_name: values.first_name, drink_id: values.drink_id, snack_id: values.snack_id })
+                apiService('/api/orders', 'POST', { first_name: values.first_name, drink_ids: values.drink_ids, snack_ids: values.snack_ids })
                     .then(values => {
                         console.log(values),
-                        console.log(drinkInputs),
                         history.push(`/orders`)
                     });
             } else if (result.isDenied) {
@@ -51,7 +49,7 @@ const PlaceOrder = () => {
     if (!values.first_name || !values.drink_id || !values.snack_id) {
         disabledBtn = true;
     }
-    const drinkSelect = <select className="form-select" name="drink_id" value={values.drink_id || ''} onChange={handleChanges}>
+    const drinkSelect = <select className="form-select" name="drink_ids" value={values.drink_ids || ''} onChange={handleChanges}>
                 <option value="0">nothing chosen...</option>
                     {drinks.map((values) => (
                     <option value={values.id} key={values.id}>
@@ -61,10 +59,8 @@ const PlaceOrder = () => {
             </select>
     const handleDrinkInput = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        // setDrinkInputs(prev => setDrinkInputs([...prev, values]))
-        drinkInputs.map(values => (
-            {drinkSelect}
-        ))
+        
+        
     }
     return (
         <>
@@ -87,7 +83,7 @@ const PlaceOrder = () => {
                 </div>
                 <label htmlFor="password" className="text-light mt-2 h3"><i className="bi bi-palette-fill"></i></label>
                 <div className="d-flex justify-content-between">
-                    <select className="form-select" name="snack_id" value={values.snack_id || ''} onChange={handleChanges}>
+                    <select className="form-select" name="snack_ids" value={values.snack_ids || ''} onChange={handleChanges}>
                         <option value="0" className="text-muted">nothing chosen...</option>
                         {snacks.map((values) => (
                             <option value={values.id} key={values.id}>
