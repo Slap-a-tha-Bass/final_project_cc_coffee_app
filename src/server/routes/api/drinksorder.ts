@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const [drinkOrder] = await get_one_drinksorder(id);
+        const drinkOrder = await get_one_drinksorder(id);
         res.json(drinkOrder);
     } catch (error) {
         res.status(500).json({ message: "Error in server route", error: error.sqlMessage });
