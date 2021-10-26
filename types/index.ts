@@ -11,11 +11,16 @@ export interface Orders {
     price?: number,
     drink_id?: number,
     snack_id?: number,
+    drink_prices?: string,
+    snack_prices?: string,
+    drink_names?: string,
+    snack_names?: string,
     _created?: Date,
     _updated?: Date,
     isPreview?: boolean,
     in_progress?: boolean,
-    is_finished?: boolean
+    is_finished?: boolean,
+    order?: object
 }
 export interface Drinks {
     id?: number,

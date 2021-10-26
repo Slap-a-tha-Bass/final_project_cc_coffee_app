@@ -5,7 +5,8 @@ import {
     get_one_order,
     post_order,
     edit_order,
-    delete_order
+    delete_order,
+    get_JOIN_everything_by_ID
 } from '../../db/queries/orders';
 import { get_one_drink } from '../../db/queries/drinks';
 
@@ -34,6 +35,22 @@ router.get('/:id', async (req, res) => {
         res.status(500).json({ message: "Error in server route", error: error.sqlMessage });
     }
 });
+router.get('/:id/join', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const [joinedDataByID] = await get_JOIN_everything_by_ID(id);
+        const order = joinedDataByID;
+        const total = [...order.drink_prices.split('&'), ...order.snack_prices.split('&')].map(price => 
+            Number(price)).reduce((a,b) => a+b).toFixed(2);
+        const drinkNames = [...order.drink_names.split('&')];
+        const snackNames = [...order.snack_names.split('&')];
+        const drinkPrices = [...order.drink_prices.split('&')].map(price => Number(price).toFixed(2));
+        const snackPrices = [...order.snack_prices.split('&')].map(price => Number(price).toFixed(2));
+        res.json({order, total, drinkNames, snackNames, drinkPrices, snackPrices});
+    } catch (error) {
+        res.status(500).json({ message: "Error in server route", error: error.sqlMessage });
+    }
+});
 router.post('/', async (req, res) => {
     const { first_name, drink_ids, snack_ids } = req.body;
     try {
@@ -49,7 +66,6 @@ router.post('/', async (req, res) => {
             const snacksOrder = { snack_id, order_id: id };
             await post_snacksorder(snacksOrder);
         }
-
         res.json({ message: "Order created!", id });
     } catch (error) {
         res.status(500).json({ message: "Error in server route", error: error.sqlMessage });

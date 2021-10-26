@@ -12,11 +12,15 @@ export const edit_order = (editOrder: Orders, id: string) => Query
 export const delete_order = (id: string) => Query
     ('DELETE FROM Orders WHERE id=?', [id]);
 
-export const get_JOIN_everything = (id: string) => Query<Orders[]>
+export const get_JOIN_everything_by_ID = (id: string) => Query<Orders[]>
     (`SELECT o.id, 
-    GROUP_CONCAT(distinct d.name separator '&') as drink_names, 
-    GROUP_CONCAT(distinct s.name separator '&') as snack_names FROM Orders o 
-    JOIN SnacksOrder so ON o.id=so.order_id 
-    JOIN DrinksOrder do ON o.id=do.order_id 
-    JOIN Snacks s ON so.snack_id=s.id 
-    JOIN Drinks d ON do.drink_id=d.id WHERE id=? GROUP BY o.id`);
+        GROUP_CONCAT(distinct d.name separator '&') as drink_names, 
+        GROUP_CONCAT(distinct s.name separator '&') as snack_names,
+        GROUP_CONCAT(distinct d.price separator '&') as drink_prices, 
+        GROUP_CONCAT(distinct s.price separator '&') as snack_prices 
+    FROM Orders o
+        JOIN SnacksOrder so ON o.id=so.order_id 
+        JOIN DrinksOrder do ON o.id=do.order_id 
+        JOIN Snacks s ON so.snack_id=s.id 
+        JOIN Drinks d ON do.drink_id=d.id WHERE o.id=? GROUP BY o.id`, [id]);
+
