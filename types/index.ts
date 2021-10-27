@@ -57,7 +57,6 @@ export interface ReqUsers extends Request {
 export interface PaymentProps {
     id: string,
     fullName: string,
-    amount: number,
     tip: number,
     subtotal: number
 }

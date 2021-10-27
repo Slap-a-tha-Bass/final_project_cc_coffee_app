@@ -42,11 +42,15 @@ router.get('/:id/join', async (req, res) => {
         const order = joinedDataByID;
         const total = [...order.drink_prices.split('&'), ...order.snack_prices.split('&')].map(price => 
             Number(price)).reduce((a,b) => a+b).toFixed(2);
-        const drinkNames = [...order.drink_names.split('&')];
-        const snackNames = [...order.snack_names.split('&')];
-        const drinkPrices = [...order.drink_prices.split('&')].map(price => Number(price).toFixed(2));
-        const snackPrices = [...order.snack_prices.split('&')].map(price => Number(price).toFixed(2));
-        res.json({order, total, drinkNames, snackNames, drinkPrices, snackPrices});
+        const drinkNames = order.drink_names;
+        const splitDrinkNames = drinkNames.split('&');
+        const snackNames = order.snack_names;
+        const splitSnackNames = snackNames.split('&');
+        const drinkPrices = order.drink_prices;
+        const splitDrinkPrices = drinkPrices.split('&').map(price => Number(price).toFixed(2));
+        const snackPrices = order.snack_prices;
+        const splitSnackPrices = snackPrices.split('&').map(price => Number(price).toFixed(2));
+        res.json({order, total, drinkNames, snackNames, drinkPrices, snackPrices, splitDrinkNames,  splitSnackNames, splitDrinkPrices, splitSnackPrices});
     } catch (error) {
         res.status(500).json({ message: "Error in server route", error: error.sqlMessage });
     }

@@ -68,6 +68,7 @@ const OrderCard = ({ id, first_name, drink_id, snack_id, price, isPreview, in_pr
         <div className="card bg-info p-2 border rounded shadow my-2">
             <h1 className="card-title text-center text-light border-3 border-bottom border-light mb-2"><i className="bi bi-braces"></i>  {first_name}</h1>
             <div className="card-body">
+                
                 <h3 className="card-text text-center text-light"><i className="bi bi-cup-fill"></i>  {drink_name} ${drink_price}</h3>
                 <h3 className="card-text text-center text-light"><i className="bi bi-palette-fill"></i>  {snack_name} ${snack_price}</h3>
                 <h5 className="card-text text-center text-light">${total}</h5>
