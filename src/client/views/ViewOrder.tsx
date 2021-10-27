@@ -7,15 +7,20 @@ import { apiService } from '../utils/api-service';
 const ViewOrder = () => {
     const { id } = useParams<{ id: string }>();
     const [orders, setOrders] = useState<Orders>();
+    const [hasLoaded, setHasLoaded] = useState(false);
 
     useEffect(() => {
         apiService(`/api/orders/${id}`)
-            .then(data => setOrders(data));
+            .then(data => {
+                console.log(data),
+                setOrders(data),
+                setHasLoaded(true);
+            })
     }, [id]);
     
     return (
         <div>
-            <OrderCard {...orders} key={id} isPreview is_finished />
+            {hasLoaded && <OrderCard {...orders} key={id} isPreview is_finished />}
         </div>
     )
 }

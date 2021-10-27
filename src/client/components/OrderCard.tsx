@@ -8,28 +8,21 @@ const OrderCard = ({ id, first_name, drink_id, snack_id, price, isPreview, in_pr
     const history = useHistory();
     const [drink_name, setDrink_name] = useState<Drinks['name']>('');
     const [snack_name, setSnack_name] = useState<Snacks['name']>('');
-    const [drink_ids, setDrinkIDs] = useState<Drinks['id']>();
+    const [drink_price, setDrink_price] = useState<Drinks['price']>();
+    const [snack_price, setSnack_price] = useState<Snacks['price']>();
+    const [total, setTotal] = useState<Orders[]>();
+
     useEffect(() => {
-        apiService(`/api/drinksorder/${id}`)
-            .then(data => {
-                console.log(data),
-                setDrinkIDs(data[0].drink_id)
-            });
+        apiService(`/api/orders/${id}/join`)
+            .then(order => {
+                setDrink_name(order.drinkNames),
+                setSnack_name(order.snackNames),
+                setDrink_price(order.drinkPrices),
+                setSnack_price(order.snackPrices),
+                setTotal(order.total)
+            })
     }, [id]);
-    useEffect(() => {
-        apiService(`/api/drinks/${drink_ids || ''}`)
-            .then(data => {
-                console.log(data);
-                setDrink_name(data.name);
-            });
-    }, [drink_ids]);
-    useEffect(() => {
-        apiService(`/api/snacksorder/${id}`)
-            .then(data => {
-                console.log(data),
-                setSnack_name(data.name)
-            });
-    }, [id]);
+    
     const handleViewOrder = (e: React.MouseEvent<HTMLButtonElement>) => {
         Swal.fire({
             title: `${first_name}'s order received!`,
@@ -75,9 +68,9 @@ const OrderCard = ({ id, first_name, drink_id, snack_id, price, isPreview, in_pr
         <div className="card bg-info p-2 border rounded shadow my-2">
             <h1 className="card-title text-center text-light border-3 border-bottom border-light mb-2"><i className="bi bi-braces"></i>  {first_name}</h1>
             <div className="card-body">
-                <h3 className="card-text text-center text-light"><i className="bi bi-cup-fill"></i>  {drink_name}</h3>
-                <h3 className="card-text text-center text-light"><i className="bi bi-palette-fill"></i>  {snack_name}</h3>
-                <h5 className="card-text text-center text-light">${price}</h5>
+                <h3 className="card-text text-center text-light"><i className="bi bi-cup-fill"></i>  {drink_name} ${drink_price}</h3>
+                <h3 className="card-text text-center text-light"><i className="bi bi-palette-fill"></i>  {snack_name} ${snack_price}</h3>
+                <h5 className="card-text text-center text-light">${total}</h5>
             </div>
             <div className="d-flex justify-content-around">
                 {isPreview && <Link className="btn btn-info btn-lg rounded-pill" to={`/edit/${id}`}><i className="bi bi-pencil-fill"></i></Link>}
