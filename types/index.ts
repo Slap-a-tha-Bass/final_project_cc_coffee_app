@@ -20,7 +20,8 @@ export interface Orders {
     isPreview?: boolean,
     in_progress?: boolean,
     is_finished?: boolean,
-    order?: object
+    order?: object,
+    tip?: number
 }
 export interface Drinks {
     id?: number,
@@ -57,6 +58,7 @@ export interface ReqUsers extends Request {
 export interface PaymentProps {
     id: string,
     fullName: string,
+    amount: number,
     tip: number,
     subtotal: number
 }

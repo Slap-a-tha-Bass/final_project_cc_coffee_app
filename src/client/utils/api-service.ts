@@ -23,6 +23,8 @@ export const apiService = async <T = any>(uri: string, method: string = 'GET', d
 
     try {
         const res = await fetch(uri, fetchOptions);
+        const data = res.json();
+        console.log({ data });
 
         // Possible errors and res.status options
         if (res.status === 400) {
@@ -41,9 +43,7 @@ export const apiService = async <T = any>(uri: string, method: string = 'GET', d
             throw new Error('server blew up, check the terminal logs');
         }
         // IF the response is good 
-        if (res.ok) {
-            return <T>await res.json();
-        }
+        return data;
         
     } catch (error) {
         console.log(error, error.message);
