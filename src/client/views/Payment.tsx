@@ -5,6 +5,7 @@ import { apiService } from '../utils/api-service';
 import Swal from 'sweetalert2';
 import { useForm } from '../hooks/useForm';
 import { useHistory, useParams } from 'react-router';
+import { StripeCardElementChangeEvent } from '@stripe/stripe-js';
 
 const Payment = () => {
     const { id } = useParams<{ id: string }>();
@@ -93,6 +94,18 @@ const Payment = () => {
         const tip24 = (Number(values.total) * 0.24);
         setTip(tip24);
     }
+    const tipMouseOver = (e: React.MouseEvent<HTMLButtonElement>) => {
+        if (tip < (Number(values.total) * 0.05)) {
+            Swal.fire({
+                title: `:'(`,
+                text: `C'mon, tip your barista!`,
+                showConfirmButton: true,
+                confirmButtonColor: '#4b0492f6',
+                confirmButtonText: 'Right! My bad'
+            });
+        }
+    }
+
     return (
         <div>
             <h1 className="text-light mt-3 text-center display-4"><i className="bi bi-cup-fill"></i> payment </h1>
@@ -133,7 +146,7 @@ const Payment = () => {
                 <label className="text-light mt-2 h3">Credit Card Information</label>
                 <CardElement className="form-control" />
                 <div className="d-flex justify-content-center">
-                    <button onClick={handleSubmitPayment} disabled={disabledBtn} className="btn btn-info rounded-pill btn-lg mt-2"><i className="bi bi-arrow-right-circle-fill"></i></button>
+                    <button onMouseOver={tipMouseOver} onClick={handleSubmitPayment} disabled={disabledBtn} className="btn btn-info rounded-pill btn-lg mt-2"><i className="bi bi-arrow-right-circle-fill"></i></button>
                 </div>
             </form>}
         </div>

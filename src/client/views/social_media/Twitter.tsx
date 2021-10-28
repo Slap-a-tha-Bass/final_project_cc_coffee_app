@@ -1,14 +1,30 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Twitter = () => {
     return (
         <div className="bg-success border border-dark rounded p-2">
             <h1 className="text-light">Twitter</h1>
-            <h4 className="text-light">Thoughts</h4>
-            <h4 className="text-light">Funny stuff</h4>
-            <h4 className="text-light">Thoughts</h4>
-            <h4 className="text-light">More funny stuff</h4>
-            <h4 className="text-light">Hey, this isn't so bad</h4>
+            <div className="d-flex justify-content-between">
+                <h4 className="text-light">Thoughts</h4>
+                <Link target="_blank" className="btn btn-light bg-light border border-info btn-lg rounded mx-2" to="/github">
+                    <i className="bi bi-github"></i>
+                </Link>
+            </div>
+            <div className="d-flex justify-content-between">
+                <Link target="_blank" className="btn btn-light bg-light border border-info btn-lg rounded mx-2" to="/github">
+                    <i className="bi bi-github"></i>
+                </Link>
+                <h4 className="text-light">Thoughts</h4>
+            </div>
+            <div className="d-flex justify-content-center">
+                <h4 className="text-light">Thoughts</h4>
+                <Link target="_blank" className="btn btn-light bg-light border border-info btn-lg rounded mx-2" to="/github">
+                    <i className="bi bi-github"></i>
+                </Link>
+            </div>
+            <h2 className="text-light text-center">More funny stuff</h2>
+            <h4 className="text-light text-center">Hey, this isn't so bad</h4>
             <div>
                 <div className="border border-light rounded">
                     <h4 className="text-light">@Slap-a-tha-Bass</h4>
@@ -28,7 +44,7 @@ const Twitter = () => {
                     <h1 className="card-title text-light">ADVERTISEMENT</h1>
                     <div className="card-body">
                         <h4 className="card-text text-light">This is how the world works now and the best way for us to make money...</h4>
-                        <button className="btn btn-info text-light">Click here for viruses</button>
+                        <Link to='/github' className="btn btn-info text-light">Click here for viruses</Link>
                     </div>
                 </div>
                 <div className="border border-light rounded">
@@ -56,7 +72,7 @@ const Twitter = () => {
                     <h1 className="card-title text-light">ADVERTISEMENT</h1>
                     <div className="card-body">
                         <h4 className="card-text text-light">This is how the world works now and the best way for us to make money...</h4>
-                        <button className="btn btn-info text-light">Click here for viruses</button>
+                        <Link to='/github' className="btn btn-info text-light">Click here for viruses</Link>
                     </div>
                 </div>
                 <div className="border border-light rounded">

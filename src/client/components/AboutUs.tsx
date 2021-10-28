@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom'
 const AboutUs = () => {
     return (
         <>
-            <div className="d-flex justify-content-center position-relative">
-                <div className="card bg-info text-light mt-2">
+            <div className="d-flex justify-content-center">
+                <div className="card bg-info text-light my-4">
                     <h3 className="card-title text-center display-4">about us</h3>
                     <div className="card-body">
                         <ul className="list-group list-group-flush border rounded">
@@ -15,7 +15,7 @@ const AboutUs = () => {
                             <li className="list-group-item text-light h4 bg-info">Non religiously welcome to all</li>
                             <li className="list-group-item text-light h4 bg-info">Disturbed but not broken</li>
                         </ul>
-                        <div className="d-flex justify-content-md-around">
+                        <div className="d-flex justify-content-md-around mt-2">
                             <Link target="_blank" className="btn btn-outline-light bg-info border border-info btn-lg rounded mx-2" to="/github">
                                 <i className="bi bi-github"></i>
                             </Link>
