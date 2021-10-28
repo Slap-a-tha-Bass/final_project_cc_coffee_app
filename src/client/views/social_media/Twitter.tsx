@@ -7,21 +7,21 @@ const Twitter = () => {
             <h1 className="text-light">Twitter</h1>
             <div className="d-flex justify-content-between">
                 <h4 className="text-light">Thoughts</h4>
-                <Link target="_blank" className="btn btn-light bg-light border border-info btn-lg rounded mx-2" to="/github">
+                <a href="https://www.github.com/Slap-a-tha-Bass" target="_blank" className="btn btn-light bg-success border border-success btn-lg rounded mx-2">
                     <i className="bi bi-github"></i>
-                </Link>
+                </a>
             </div>
             <div className="d-flex justify-content-between">
-                <Link target="_blank" className="btn btn-light bg-light border border-info btn-lg rounded mx-2" to="/github">
+            <a href="https://www.github.com/Slap-a-tha-Bass" target="_blank" className="btn btn-light bg-success border border-success btn-lg rounded mx-2">
                     <i className="bi bi-github"></i>
-                </Link>
+                </a>
                 <h4 className="text-light">Thoughts</h4>
             </div>
             <div className="d-flex justify-content-center">
                 <h4 className="text-light">Thoughts</h4>
-                <Link target="_blank" className="btn btn-light bg-light border border-info btn-lg rounded mx-2" to="/github">
+                <a href="https://www.github.com/Slap-a-tha-Bass" target="_blank" className="btn btn-light bg-success border border-success btn-lg rounded mx-2">
                     <i className="bi bi-github"></i>
-                </Link>
+                </a>
             </div>
             <h2 className="text-light text-center">More funny stuff</h2>
             <h4 className="text-light text-center">Hey, this isn't so bad</h4>

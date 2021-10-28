@@ -16,9 +16,12 @@ const AboutUs = () => {
                             <li className="list-group-item text-light h4 bg-info">Disturbed but not broken</li>
                         </ul>
                         <div className="d-flex justify-content-md-around mt-2">
-                            <Link target="_blank" className="btn btn-outline-light bg-info border border-info btn-lg rounded mx-2" to="/github">
+                            <a href="https://www.github.com/Slap-a-tha-Bass" target="_blank" className="btn btn-outline-light bg-info border border-info btn-lg rounded mx-2">
                                 <i className="bi bi-github"></i>
-                            </Link>
+                            </a>
+                            <a href="https://www.linkedin.com/in/corey-deloach-061180124/" target="_blank" className="btn btn-outline-light bg-info border border-info btn-lg rounded mx-2">
+                                <i className="bi bi-linkedin"></i>
+                            </a>
                             <Link target="_blank" className="btn btn-outline-light bg-info border border-info btn-lg rounded mx-2" to="/facebook">
                                 <i className="bi bi-facebook"></i>
                             </Link>
