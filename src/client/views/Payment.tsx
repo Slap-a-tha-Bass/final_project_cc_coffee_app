@@ -10,8 +10,8 @@ const Payment = () => {
     const { id } = useParams<{ id: string }>();
     const history = useHistory();
     const { values, handleChanges, populate } = useForm();
-    const [fullName, setFullName] = useState<PaymentProps['fullName']>('');
-    const [tip, setTip] = useState(0.00);
+    const [tip, setTip] = useState(0);
+    const [grandTotal, setGrandTotal] = useState(0);
     const [hasLoaded, setHasLoaded] = useState(false);
 
 
@@ -29,7 +29,7 @@ const Payment = () => {
             type: 'card',
             card: cardData,
             billing_details: {
-                name: fullName
+                name: values.fullName
             }
         });
         console.log(values.total, tip)
@@ -46,14 +46,14 @@ const Payment = () => {
             denyButtonText: 'Cancel'
         }).then(async (results) => {
             if (results.isConfirmed) {
-                const received = await apiService('/api/payment', 'POST', { amount: Number(values.total) + Number(tip), paymentMethod });
+                const received = await apiService('/api/payment', 'POST', { amount: grandTotal, paymentMethod });
                 console.log(received),
-                Swal.fire({
-                    title: 'Payment accepted!',
-                    icon: 'success',
-                    iconColor: '#4b0492f6',
-                    html: `<a className="text-decoration-none text-info" target="_blank" href=${received.receiptURL}>click here to see receipt</a>`
-                })
+                    Swal.fire({
+                        title: 'Payment accepted!',
+                        icon: 'success',
+                        iconColor: '#4b0492f6',
+                        html: `<a target="_blank" href=${received.receiptURL}>view receipt</a>`
+                    })
                 history.push('/orders')
             } else if (results.isDenied) {
                 return;
@@ -61,78 +61,81 @@ const Payment = () => {
         }).catch((error) => {
             console.log(error);
         });
-        if(error) {console.log(error)};
+        if (error) { console.log(error) };
         console.log(paymentMethod)
     }
     let disabledBtn = false;
-    if (!fullName || !tip) {
+    if (!values.fullName || !tip) {
         disabledBtn = true;
     }
     useEffect(() => {
         apiService(`/api/orders/${id}/join`)
             .then(values => {
                 populate(values),
-                setHasLoaded(true)
+                    setHasLoaded(true)
             });
     }, [id]);
+    useEffect(() => {
+        setGrandTotal(Number(values.total || 0) + tip)
+    }, [values.total, tip]);
     const handle18 = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        let tip18 = (Number(values.total) * 0.18);
+        const tip18 = (Number(values.total) * 0.18);
         setTip(tip18);
     }
     const handle21 = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        let tip21 = (Number(values.total) * 0.21);
+        const tip21 = (Number(values.total) * 0.21);
         setTip(tip21);
     }
     const handle24 = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        let tip24 = (Number(values.total) * 0.24);
+        const tip24 = (Number(values.total) * 0.24);
         setTip(tip24);
     }
     return (
         <div>
             <h1 className="text-light mt-3 text-center display-4"><i className="bi bi-cup-fill"></i> payment </h1>
-            <form className="form-group bg-info p-2">
+            {hasLoaded && <form className="form-group bg-info p-2">
                 <label className="text-light mt-2 h3" >full name</label>
-                {hasLoaded && <input
+                <input
                     name="fullName"
-                    value={fullName || ''}
-                    onChange={e => setFullName(e.target.value)}
+                    value={values.fullName || ''}
+                    onChange={handleChanges}
                     type="text"
                     placeholder='name as it appears on card'
-                    className="form-control" />}
+                    className="form-control" />
                 <label className="text-light mt-2 h3" >subtotal</label>
-                {hasLoaded && <input
+                <input
                     name="total"
                     value={Number(values.total) || 0}
                     onChange={handleChanges}
                     type="number"
-                    className="form-control" />}
-                {hasLoaded && <label className="text-light mt-2 h6" >
+                    className="form-control" />
+                <label className="text-light mt-2 h6" >
                     <button onClick={handle18} className="btn btn-info mx-3">tip %18 = ${(Number(values.total) * 0.18).toFixed(2)}</button>
                     <button onClick={handle21} className="btn btn-info mx-3">tip %21 = ${(Number(values.total) * 0.21).toFixed(2)}</button>
                     <button onClick={handle24} className="btn btn-info mx-3">tip %24 = ${(Number(values.total) * 0.24).toFixed(2)}</button>
-                </label>}
-                {hasLoaded && <input
+                </label>
+                <input
                     name="tip"
                     value={Number(tip) || 0}
                     onChange={e => setTip(Number(e.target.value))}
                     type="number"
-                    className="form-control" />}
+                    className="form-control" />
                 <label className="text-light mt-2 h3" >Total</label>
-                {hasLoaded && <input
+                <input
                     name="grandtotal"
-                    value={(Number(values.total) + Number(tip)) || 0}
-                    onChange={handleChanges}
+                    value={grandTotal}
                     type="number"
-                    className="form-control" />}
-                <label>Credit Card Information</label>
+                    readOnly
+                    className="form-control" />
+                <label className="text-light mt-2 h3">Credit Card Information</label>
                 <CardElement className="form-control" />
                 <div className="d-flex justify-content-center">
                     <button onClick={handleSubmitPayment} disabled={disabledBtn} className="btn btn-info rounded-pill btn-lg mt-2"><i className="bi bi-arrow-right-circle-fill"></i></button>
                 </div>
-            </form>
+            </form>}
         </div>
     )
 }

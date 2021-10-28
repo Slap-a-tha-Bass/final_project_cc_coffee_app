@@ -11,14 +11,16 @@ router.post('/', async(req,res) => {
     try {
         const paymentFulfilled = await stripe.paymentIntents.create({
             currency: 'usd',
-            amount: amount * 100,
+            amount: Math.floor(amount * 100),
             confirm: true,
             payment_method: paymentMethod.id
         });
         const receiptURL = paymentFulfilled.charges.data[0].receipt_url;
         res.json({receiptURL});
+        console.log({ amount, paymentMethod });
     } catch (error) {
-        res.status(500).json({ message: "Error posting payment", error: error.sqlMessage});
+        res.status(500).json({ message: "Error posting payment", error});
+    console.log({error, message: "Caught in payment catch block"});
     }
 })
 
