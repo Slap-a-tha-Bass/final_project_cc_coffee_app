@@ -10,6 +10,10 @@ const PlaceOrder = () => {
     const { values, handleChanges } = useForm();
     const [drinks, setDrinks] = useState<Drinks[]>([]);
     const [snacks, setSnacks] = useState<Snacks[]>([]);
+    const [selectedDrinks, setSelectedDrinks] = useState([]);
+    const [drinkValue, setDrinkValue] = useState(0);
+    const [selectedSnacks, setSelectedSnacks] = useState([]);
+    const [snackValue, setSnackValue] = useState(0);
 
     useEffect(() => {
         apiService('/api/drinks')
@@ -37,7 +41,7 @@ const PlaceOrder = () => {
                 apiService('/api/orders', 'POST', { first_name: values.first_name, drink_ids: values.drink_ids, snack_ids: values.snack_ids })
                     .then(values => {
                         console.log(values),
-                        history.push(`/orders`)
+                            history.push(`/orders`)
                     });
             } else if (result.isDenied) {
                 return;
@@ -49,18 +53,15 @@ const PlaceOrder = () => {
     if (!values.first_name || !values.drink_id || !values.snack_id) {
         disabledBtn = true;
     }
-    const drinkSelect = <select className="form-select" name="drink_ids" value={values.drink_ids || ''} onChange={handleChanges}>
-                <option value="0">nothing chosen...</option>
-                    {drinks.map((values) => (
-                    <option value={values.id} key={values.id}>
-                        {values.name}  ${values.price}
-                    </option>
-                    ))}
-            </select>
-    const handleDrinkInput = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        
-        
+    const handleAddDrink = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const [filteredDrinkId] = drinks.filter(fd => fd.id === Number(e.target.value));    
+        setSelectedDrinks([...selectedDrinks, filteredDrinkId]);
+        setDrinkValue(0);
+    }
+    const handleAddSnack = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const [filteredSnackId] = snacks.filter(fs => fs.id === Number(e.target.value));    
+        setSelectedSnacks([...selectedSnacks, filteredSnackId]);
+        setSnackValue(0);
     }
     return (
         <>
@@ -78,13 +79,24 @@ const PlaceOrder = () => {
                 </div>
                 <label htmlFor="email" className="text-light mt-2 h3"><i className="bi bi-cup-fill"></i></label>
                 <div className="d-flex justify-content-between">
-                    {drinkSelect}
-                    <button onClick={handleDrinkInput} className="btn btn-info"><i className="bi bi-plus-circle-fill"></i></button>
+                    <select className="form-select" name="drink_ids" value={drinkValue} onChange={handleAddDrink}>
+                        <option value="0">add drink</option>
+                        {drinks.map((values) => (
+                            <option value={values.id} key={values.id}>
+                                {values.name}  ${values.price}
+                            </option>
+                        ))}
+                    </select>
                 </div>
+                <ul className="list-group list-group-flush">
+                    {selectedDrinks.map(drink => {
+                        return <li key={`drink-item-${drink.id}`} className="list-group-item border border-info rounded bg-info text-light d-md-inline">{drink.name} ${drink.price}</li>
+                    })}
+                </ul>
                 <label htmlFor="password" className="text-light mt-2 h3"><i className="bi bi-palette-fill"></i></label>
                 <div className="d-flex justify-content-between">
-                    <select className="form-select" name="snack_ids" value={values.snack_ids || ''} onChange={handleChanges}>
-                        <option value="0" className="text-muted">nothing chosen...</option>
+                    <select className="form-select" name="snack_ids" value={snackValue} onChange={handleAddSnack}>
+                        <option value="0" >add snack</option>
                         {snacks.map((values) => (
                             <option value={values.id} key={values.id}>
                                 {values.name}  ${values.price}
@@ -92,6 +104,11 @@ const PlaceOrder = () => {
                         ))}
                     </select>
                 </div>
+                <ul className="list-group list-group-flush">
+                    {selectedSnacks.map(snack => {
+                        return <li key={`snack-item-${snack.id}`} className="list-group-item border border-info rounded bg-info text-light">{snack.name} ${snack.price}</li>
+                    })}
+                </ul>
                 <div className="d-flex justify-content-center mt-2">
                     <button onClick={handleSubmit} disabled={disabledBtn} className="btn btn-info btn-lg rounded-pill"><i className="bi bi-arrow-right-circle-fill"></i></button>
                 </div>
