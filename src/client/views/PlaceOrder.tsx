@@ -38,7 +38,7 @@ const PlaceOrder = () => {
             denyButtonColor: '#ff0000'
         }).then((result) => {
             if (result.isConfirmed) {
-                apiService('/api/orders', 'POST', { first_name: values.first_name, drink_ids: values.drink_ids, snack_ids: values.snack_ids })
+                apiService('/api/orders', 'POST', { first_name: values.first_name, drink_ids: drink_ids, snack_ids: snack_ids })
                     .then(values => {
                         console.log(values),
                             history.push(`/orders`)
@@ -50,19 +50,23 @@ const PlaceOrder = () => {
 
     }
     let disabledBtn = false;
-    if (!values.first_name || !values.drink_id || !values.snack_id) {
+    if (!values.first_name || !selectedDrinks || !selectedSnacks) {
         disabledBtn = true;
     }
     const handleAddDrink = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const [filteredDrinkId] = drinks.filter(fd => fd.id === Number(e.target.value));    
+        const [filteredDrinkId] = drinks.filter(fd => fd.id === Number(e.target.value));
         setSelectedDrinks([...selectedDrinks, filteredDrinkId]);
         setDrinkValue(0);
     }
     const handleAddSnack = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const [filteredSnackId] = snacks.filter(fs => fs.id === Number(e.target.value));    
+        const [filteredSnackId] = snacks.filter(fs => fs.id === Number(e.target.value));
         setSelectedSnacks([...selectedSnacks, filteredSnackId]);
         setSnackValue(0);
     }
+    const drink_ids = selectedDrinks.map(drink => drink.id);
+    const snack_ids = selectedSnacks.map(snack => snack.id);
+
+    console.log({selectedDrinks, drink_ids, snack_ids});
     return (
         <>
             <h1 className="text-light text-center display-4 mt-3"><i className="bi bi-cup-fill"></i> c^2 coffee </h1>

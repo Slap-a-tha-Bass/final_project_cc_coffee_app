@@ -24,7 +24,7 @@ export const apiService = async <T = any>(uri: string, method: string = 'GET', d
     try {
         const res = await fetch(uri, fetchOptions);
         const data = res.json();
-        console.log({ data });
+        // console.log({ data });
 
         // Possible errors and res.status options
         if (res.status === 400) {
