@@ -47,7 +47,6 @@ const PlaceOrder = () => {
                 return;
             }
         })
-
     }
     let disabledBtn = false;
     if (!values.first_name || !selectedDrinks || !selectedSnacks) {
@@ -94,7 +93,7 @@ const PlaceOrder = () => {
                 </div>
                 <ul className="list-group list-group-flush">
                     {selectedDrinks.map(drink => {
-                        return <li key={`drink-item-${drink.id}`} className="list-group-item border border-info rounded bg-info text-light d-md-inline">{drink.name} ${drink.price}</li>
+                        return <li key={`drink-item-${drink.id}-${drink.price}`} className="list-group-item border border-info rounded bg-info text-light d-md-inline">{drink.name} ${drink.price}</li>
                     })}
                 </ul>
                 <label htmlFor="password" className="text-light mt-2 h3"><i className="bi bi-palette-fill"></i></label>
@@ -110,7 +109,7 @@ const PlaceOrder = () => {
                 </div>
                 <ul className="list-group list-group-flush">
                     {selectedSnacks.map(snack => {
-                        return <li key={`snack-item-${snack.id}`} className="list-group-item border border-info rounded bg-info text-light">{snack.name} ${snack.price}</li>
+                        return <li key={`snack-item-${snack.id}-${snack.price}`} className="list-group-item border border-info rounded bg-info text-light">{snack.name} ${snack.price}</li>
                     })}
                 </ul>
                 <div className="d-flex justify-content-center mt-2">

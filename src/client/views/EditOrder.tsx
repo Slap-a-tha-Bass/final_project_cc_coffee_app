@@ -116,17 +116,17 @@ const EditOrder = () => {
                     <div className="d-flex justify-content-around">
                         <div className="d-inline">
                             {drinkNames.map(drinkName => (
-                                <li key={`drink-item-${Math.random() * 100}`} className="list-group-item border border-info rounded bg-info text-light">{drinkName}</li>
+                                <li key={`drink-name-${drinkNames.indexOf(drinkName)}`} className="list-group-item border border-info rounded bg-info text-light">{drinkName}</li>
                             ))}
                         </div>
                         <div className="d-inline">
                             {drinkPrices.map(drinkPrice => (
-                                <li key={`drink-item-${Math.random() * 100}`} className="list-group-item border border-info rounded bg-info text-light"> ${drinkPrice}</li>
+                                <li key={`drink-price-${drinkPrices.indexOf(drinkPrice)}`} className="list-group-item border border-info rounded bg-info text-light"> ${drinkPrice}</li>
                             ))}
                         </div>
                     </div>
                     {selectedDrinks.map(drink => {
-                        return <li key={`drink-item-${Math.random() * 100}`} className="list-group-item border border-info rounded bg-info text-light d-md-inline">{drink.name} ${drink.price}</li>
+                        return <li key={`drink-item-${selectedDrinks.indexOf(drink)}`} className="list-group-item border border-info rounded bg-info text-light d-md-inline">{drink.name} ${drink.price}</li>
                     })}
                 </ul>
                 <label htmlFor="password" className="text-light mt-2 h3"><i className="bi bi-palette-fill"></i></label>
@@ -144,15 +144,18 @@ const EditOrder = () => {
                     <div className="d-flex justify-content-around">
                         <div className="d-inline">
                             {snackNames.map(snackName => {
-                                return <li key={`snack-item-${Math.random()}`} className="list-group-item border border-info rounded bg-info text-light">{snackName}</li>
+                                return <li key={`snack-name-${snackNames.indexOf(snackName)}`} className="list-group-item border border-info rounded bg-info text-light">{snackName}</li>
                             })}
                         </div>
                         <div className="d-inline">
                             {snackPrices.map(snackPrice => (
-                                <li key={`snack-item-${Math.random() * 100}`} className="list-group-item border border-info rounded bg-info text-light"> ${snackPrice}</li>
+                                <li key={`snack-price-${snackPrices.indexOf(snackPrice)}`} className="list-group-item border border-info rounded bg-info text-light"> ${snackPrice}</li>
                             ))}
                         </div>
                     </div>
+                    {selectedSnacks.map(snack => {
+                        return <li key={`snack-item-${selectedSnacks.indexOf(snack)}`} className="list-group-item border border-info rounded bg-info text-light d-md-inline">{snack.name} ${snack.price}</li>
+                    })}
                 </ul>
                 <div className="d-flex justify-content-center mt-2">
                     <button onClick={handleSubmit} disabled={disabledBtn} className="btn btn-info btn-lg rounded-pill"><i className="bi bi-arrow-right-circle-fill"></i></button>

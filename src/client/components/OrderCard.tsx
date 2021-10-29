@@ -58,7 +58,15 @@ const OrderCard = ({ id, first_name, drink_id, snack_id, price, isPreview, in_pr
         }).then((result) => {
             if (result.isConfirmed) {
                 apiService(`/api/orders/${id}`, 'DELETE', { first_name })
-                    .then(() => history.push('/orders'));
+                    .then(() => {
+                        Swal.fire({
+                            title: 'Order deleted!',
+                            icon: 'success',
+                            iconColor: '#4b0492f6',
+                            showConfirmButton: false,
+                            timer: 1000
+                        })
+                        history.push('/orders')});
             } else if (result.isDenied) {
                 return;
             }
