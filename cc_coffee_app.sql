@@ -45,7 +45,7 @@ CREATE TABLE Orders (
     in_progress TINYINT,
     is_finished TINYINT
 );
-SELECT * FROM Orders ORDER BY _created DESC;
+SELECT o.id, GROUP_CONCAT(distinct d.name separator '&') as drink_names, GROUP_CONCAT(distinct s.name separator '&') as snack_names, GROUP_CONCAT(distinct d.price separator '&') as drink_prices, GROUP_CONCAT(distinct s.price separator '&') as snack_prices FROM Orders o JOIN SnacksOrder so ON o.id=so.order_id JOIN DrinksOrder do ON o.id=do.order_id JOIN Snacks s ON so.snack_id=s.id JOIN Drinks d ON do.drink_id=d.id GROUP BY o.id;
 DROP TABLE IF EXISTS Users;
 CREATE TABLE Users (
     id CHAR(36) NOT NULL PRIMARY KEY,
