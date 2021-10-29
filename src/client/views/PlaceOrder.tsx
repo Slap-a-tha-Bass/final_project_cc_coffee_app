@@ -66,7 +66,7 @@ const PlaceOrder = () => {
     const drink_ids = selectedDrinks.map(drink => drink.id);
     const snack_ids = selectedSnacks.map(snack => snack.id);
 
-    console.log({selectedDrinks, drink_ids, snack_ids});
+    // console.log({selectedDrinks, drink_ids, snack_ids});
     return (
         <>
             <h1 className="text-light text-center display-4 mt-3"><i className="bi bi-cup-fill"></i> c^2 coffee </h1>

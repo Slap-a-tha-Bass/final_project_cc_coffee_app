@@ -12,7 +12,6 @@ const ViewOrder = () => {
     useEffect(() => {
         apiService(`/api/orders/${id}`)
             .then(data => {
-                console.log(data),
                 setOrders(data),
                 setHasLoaded(true);
             })
