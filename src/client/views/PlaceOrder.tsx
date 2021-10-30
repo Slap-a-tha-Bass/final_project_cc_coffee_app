@@ -28,11 +28,11 @@ const PlaceOrder = () => {
         Swal.fire({
             title: 'Review Order',
             icon: 'info',
-            iconColor: '#4b0492f6',
+            iconColor: '#000000',
             text: 'Please check to make sure everything looks good',
             showConfirmButton: true,
             confirmButtonText: 'Looks good!',
-            confirmButtonColor: '#4b0492f6',
+            confirmButtonColor: '#000000',
             showDenyButton: true,
             denyButtonText: 'Lemme double check!',
             denyButtonColor: '#ff0000'
@@ -68,9 +68,9 @@ const PlaceOrder = () => {
     // console.log({selectedDrinks, drink_ids, snack_ids});
     return (
         <>
-            <h1 className="text-light text-center display-4 mt-3"><i className="bi bi-cup-fill"></i> c^2 coffee </h1>
-            <form className="form-group bg-info border rounded p-2">
-                <label htmlFor="first_name" className="text-light mt-2 h3"><i className="bi bi-braces"></i></label>
+            <h1 className="text-center display-4 mt-3"><i className="bi bi-cup-fill"></i> c^2 coffee </h1>
+            <form className="form-group bg-light bg-gradient border rounded p-2">
+                <label htmlFor="first_name" className=" mt-2 h3"><i className="bi bi-braces"></i></label>
                 <div className="d-flex justify-content-between">
                     <input
                         name="first_name"
@@ -80,7 +80,7 @@ const PlaceOrder = () => {
                         type="text"
                         className="form-control" />
                 </div>
-                <label htmlFor="email" className="text-light mt-2 h3"><i className="bi bi-cup-fill"></i></label>
+                <label htmlFor="email" className=" mt-2 h3"><i className="bi bi-cup-fill"></i></label>
                 <div className="d-flex justify-content-between">
                     <select className="form-select" name="drink_ids" value={drinkValue} onChange={handleAddDrink}>
                         <option value="0">add drink</option>
@@ -93,10 +93,10 @@ const PlaceOrder = () => {
                 </div>
                 <ul className="list-group list-group-flush">
                     {selectedDrinks.map(drink => {
-                        return <li key={`drink-item-${drink.id}-${drink.price}`} className="list-group-item border border-info rounded bg-info text-light d-md-inline">{drink.name} ${drink.price}</li>
+                        return <li key={`drink-item-${drink.id}-${drink.price}`} className="list-group-item border border-light rounded bg-light  d-md-inline">{drink.name} ${drink.price}</li>
                     })}
                 </ul>
-                <label htmlFor="password" className="text-light mt-2 h3"><i className="bi bi-palette-fill"></i></label>
+                <label htmlFor="password" className=" mt-2 h3"><i className="bi bi-palette-fill"></i></label>
                 <div className="d-flex justify-content-between">
                     <select className="form-select" name="snack_ids" value={snackValue} onChange={handleAddSnack}>
                         <option value="0" >add snack</option>
@@ -109,11 +109,11 @@ const PlaceOrder = () => {
                 </div>
                 <ul className="list-group list-group-flush">
                     {selectedSnacks.map(snack => {
-                        return <li key={`snack-item-${snack.id}-${snack.price}`} className="list-group-item border border-info rounded bg-info text-light">{snack.name} ${snack.price}</li>
+                        return <li key={`snack-item-${snack.id}-${snack.price}`} className="list-group-item border border-light rounded bg-light ">{snack.name} ${snack.price}</li>
                     })}
                 </ul>
                 <div className="d-flex justify-content-center mt-2">
-                    <button onClick={handleSubmit} disabled={disabledBtn} className="btn btn-info btn-lg rounded-pill"><i className="bi bi-arrow-right-circle-fill"></i></button>
+                    <button onClick={handleSubmit} disabled={disabledBtn} className="btn btn-light btn-lg rounded-pill"><i className="bi bi-arrow-right-circle-fill"></i></button>
                 </div>
             </form >
         </>

@@ -42,7 +42,7 @@ router.get('/:id/join', async (req, res) => {
         const order = joinedDataByID;
         console.log(order);
         const total = [...order.drink_prices.split('&'), ...order.snack_prices.split('&')].map(price => 
-            Number(price)).reduce((a,b) => a+b).toFixed(2);
+            Number(price)).reduce((a,b) => (a+b)*1.09).toFixed(2);
         const drinkNames = order.drink_names;
         const splitDrinkNames = drinkNames.split('&');
         const snackNames = order.snack_names;

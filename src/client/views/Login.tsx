@@ -21,7 +21,7 @@ const Login = () => {
         Swal.fire({
             title: 'Already logged in!',
             icon: 'error',
-            iconColor: '#4b0492f6',
+            iconColor: '#000000',
             timer: 1000,
             showConfirmButton: false
         })
@@ -33,16 +33,16 @@ const Login = () => {
     }
     return (
         <>
-            <h1 className="text-light mt-3 text-center display-4"><i className="bi bi-cup-fill"></i> login </h1>
-            <form className="form-group bg-info border rounded p-2">
-                <label htmlFor="email" className="text-light">email</label>
+            <h1 className="mt-3 text-center display-4"><i className="bi bi-cup-fill"></i> login </h1>
+            <form className="form-group bg-light border rounded shadow-lg p-2">
+                <label htmlFor="email">email</label>
                 <input
                     name="email"
                     value={values.email || ''}
                     onChange={handleChanges}
                     type="email"
                     className="form-control" />
-                <label htmlFor="password" className="text-light">password</label>
+                <label htmlFor="password">password</label>
                 <input
                     name="password"
                     value={values.password || ''}
@@ -50,11 +50,11 @@ const Login = () => {
                     type="password"
                     className="form-control" />
                 <div className="d-flex justify-content-center">
-                    <button onClick={handleLogin} disabled={disabledBtn} className="btn btn-info btn-lg mt-2"><i className="bi bi-arrow-right-circle-fill"></i></button>
+                    <button onClick={handleLogin} disabled={disabledBtn} className="btn btn-light btn-lg mt-2"><i className="bi bi-arrow-right-circle-fill"></i></button>
                 </div>
             </form>
-            <h3 className="text-light mt-3">Not a member?</h3>
-            <Link to="/register" className="btn btn-info btn-lg text-light mt-2">Register here</Link>
+            <h3 className="mt-3">Not a member?</h3>
+            <Link to="/register" className="btn btn-dark text-light btn-lg mt-2">Register here</Link>
         </>
     )
 }

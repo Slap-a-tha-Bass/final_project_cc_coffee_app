@@ -11,10 +11,10 @@ const PrivateRoute = ({children, ...rest}: IPrivateRoute) => {
            title: 'Invalid credentials',
            text: 'You need to login to do that',
            icon: 'error',
-           iconColor: '#4b0492f6',
+           iconColor: '#000000',
            showConfirmButton: false,
            timer: 2000,
-           confirmButtonColor: '#4b0492f6'
+           confirmButtonColor: '#000000'
        })
        return <Redirect to="/login" />
    } else {

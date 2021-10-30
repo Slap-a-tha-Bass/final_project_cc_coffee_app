@@ -1,4 +1,5 @@
 import * as express from 'express';
+import * as fs from 'fs';
 import Stripe from 'stripe';
 import { stripeConfig } from '../../config';
 
@@ -17,6 +18,11 @@ router.post('/', async(req,res) => {
         });
         const receiptURL = paymentFulfilled.charges.data[0].receipt_url;
         res.json({receiptURL});
+        fs.writeFile('/api/receipts.ts', `receiptURL ${receiptURL} @ ${Date.now()}`, error => {
+            if (error){
+                console.log(error);
+            }
+        })
         console.log({ amount, paymentMethod });
     } catch (error) {
         res.status(500).json({ message: "Error posting payment", error});

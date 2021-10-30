@@ -5,7 +5,6 @@ import { apiService } from '../utils/api-service';
 import Swal from 'sweetalert2';
 import { useForm } from '../hooks/useForm';
 import { useHistory, useParams } from 'react-router';
-import { StripeCardElementChangeEvent } from '@stripe/stripe-js';
 
 const Payment = () => {
     const { id } = useParams<{ id: string }>();
@@ -37,10 +36,10 @@ const Payment = () => {
         Swal.fire({
             title: 'Are you sure you want to submit payment?',
             icon: 'question',
-            iconColor: '#4b0492f6',
+            iconColor: '#000000',
             text: 'Your card will be charged the full amount',
             showConfirmButton: true,
-            confirmButtonColor: '#4b0492f6',
+            confirmButtonColor: '#000000',
             confirmButtonText: 'Submit',
             showDenyButton: true,
             denyButtonColor: '#ff0000',
@@ -52,8 +51,14 @@ const Payment = () => {
                     Swal.fire({
                         title: 'Payment accepted!',
                         icon: 'success',
-                        iconColor: '#4b0492f6',
-                        html: `<a target="_blank" href=${received.receiptURL}>view receipt</a>`
+                        iconColor: '#000000',
+                        html: `<a target="_blank" href=${received.receiptURL}>view receipt</a>`,
+                        confirmButtonText: 'Got it',
+                        confirmButtonColor: '000000'
+                    }).then(res => {
+                        if(res.isConfirmed){
+                            
+                        }
                     })
                 history.push('/orders')
             } else if (results.isDenied) {
@@ -100,7 +105,7 @@ const Payment = () => {
                 title: `:'(`,
                 text: `C'mon, tip your barista!`,
                 showConfirmButton: true,
-                confirmButtonColor: '#4b0492f6',
+                confirmButtonColor: '#000000',
                 confirmButtonText: 'Right! My bad'
             });
         }
@@ -108,9 +113,9 @@ const Payment = () => {
 
     return (
         <div>
-            <h1 className="text-light mt-3 text-center display-4"><i className="bi bi-cup-fill"></i> payment </h1>
-            {hasLoaded && <form className="form-group bg-info p-2">
-                <label className="text-light mt-2 h3" >full name</label>
+            <h1 className="mt-3 text-center display-4"><i className="bi bi-cup-fill"></i> payment </h1>
+            {hasLoaded && <form className="form-group bg-light shadow-lg p-2">
+                <label className="mt-2 h3" >full name</label>
                 <input
                     name="fullName"
                     value={values.fullName || ''}
@@ -118,35 +123,35 @@ const Payment = () => {
                     type="text"
                     placeholder='name as it appears on card'
                     className="form-control" />
-                <label className="text-light mt-2 h3" >subtotal</label>
+                <label className="mt-2 h3" >subtotal</label>
                 <input
                     name="total"
                     value={Number(values.total) || 0}
                     onChange={handleChanges}
                     type="number"
                     className="form-control" />
-                <label className="text-light mt-2 h6" >
-                    <button onClick={handle18} className="btn btn-info mx-3">tip %18 = ${(Number(values.total) * 0.18).toFixed(2)}</button>
-                    <button onClick={handle21} className="btn btn-info mx-3">tip %21 = ${(Number(values.total) * 0.21).toFixed(2)}</button>
-                    <button onClick={handle24} className="btn btn-info mx-3">tip %24 = ${(Number(values.total) * 0.24).toFixed(2)}</button>
+                <label className="mt-2 h6" >
+                    <button onClick={handle18} className="btn btn-light mx-3">tip %18 = ${(Number(values.total) * 0.18).toFixed(2)}</button>
+                    <button onClick={handle21} className="btn btn-light mx-3">tip %21 = ${(Number(values.total) * 0.21).toFixed(2)}</button>
+                    <button onClick={handle24} className="btn btn-light mx-3">tip %24 = ${(Number(values.total) * 0.24).toFixed(2)}</button>
                 </label>
                 <input
                     name="tip"
-                    value={Number(tip) || 0}
+                    value={Number(tip).toFixed(2) || 0}
                     onChange={e => setTip(Number(e.target.value))}
                     type="number"
                     className="form-control" />
-                <label className="text-light mt-2 h3" >Total</label>
+                <label className="mt-2 h3" >Total</label>
                 <input
                     name="grandtotal"
-                    value={grandTotal}
+                    value={grandTotal.toFixed(2)}
                     type="number"
                     readOnly
                     className="form-control" />
-                <label className="text-light mt-2 h3">Credit Card Information</label>
+                <label className="mt-2 h3">Credit Card Information</label>
                 <CardElement className="form-control" />
                 <div className="d-flex justify-content-center">
-                    <button onMouseOver={tipMouseOver} onClick={handleSubmitPayment} disabled={disabledBtn} className="btn btn-info rounded-pill btn-lg mt-2"><i className="bi bi-arrow-right-circle-fill"></i></button>
+                    <button onMouseOver={tipMouseOver} onClick={handleSubmitPayment} disabled={disabledBtn} className="btn btn-light rounded-pill btn-lg mt-2"><i className="bi bi-arrow-right-circle-fill"></i></button>
                 </div>
             </form>}
         </div>

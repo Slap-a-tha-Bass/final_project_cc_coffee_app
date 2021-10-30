@@ -27,7 +27,7 @@ const OrderCard = ({ id, first_name, drink_id, snack_id, price, isPreview, in_pr
         Swal.fire({
             title: `${first_name}'s order received!`,
             icon: 'success',
-            iconColor: '#4b0492f6',
+            iconColor: '#000000',
             timer: 2000,
             showConfirmButton: false
         });
@@ -37,7 +37,7 @@ const OrderCard = ({ id, first_name, drink_id, snack_id, price, isPreview, in_pr
         Swal.fire({
             title: `${first_name}'s order ready for payment!`,
             icon: 'success',
-            iconColor: '#4b0492f6',
+            iconColor: '#000000',
             timer: 2000,
             showConfirmButton: false
         });
@@ -47,11 +47,11 @@ const OrderCard = ({ id, first_name, drink_id, snack_id, price, isPreview, in_pr
         Swal.fire({
             title: 'Delete Order?',
             icon: 'warning',
-            iconColor: '#4b0492f6',
+            iconColor: '#000000',
             text: `Are you sure you want to delete ${first_name}'s order?`,
             showConfirmButton: true,
             confirmButtonText: 'Yes, I am sure!',
-            confirmButtonColor: '#4b0492f6',
+            confirmButtonColor: '#000000',
             showDenyButton: true,
             denyButtonText: 'Actually, no!',
             denyButtonColor: '#ff0000'
@@ -62,7 +62,7 @@ const OrderCard = ({ id, first_name, drink_id, snack_id, price, isPreview, in_pr
                         Swal.fire({
                             title: 'Order deleted!',
                             icon: 'success',
-                            iconColor: '#4b0492f6',
+                            iconColor: '#000000',
                             showConfirmButton: false,
                             timer: 1000
                         })
@@ -73,20 +73,20 @@ const OrderCard = ({ id, first_name, drink_id, snack_id, price, isPreview, in_pr
         })
     }
     return (
-        <div className="card bg-info p-2 border rounded shadow my-2">
-            <h1 className="card-title text-center text-light border-3 border-bottom border-light mb-2"><i className="bi bi-braces"></i>  {first_name}</h1>
+        <div className="card bg-light bg-gradient p-2 border rounded shadow-lg my-2">
+            <h1 className="card-title text-center border-3 border-bottom border-dark mb-2"><i className="bi bi-braces"></i>  {first_name}</h1>
             <div className="card-body">
-                <h3 className="card-text text-center text-light mt-3"><i className="bi bi-cup-fill"></i>  {drink_name.split('&').join(' & ')}</h3>
-                <h3 className="card-text text-center text-light mt-3"><i className="bi bi-palette-fill"></i>  {snack_name.split('&').join(' & ')}</h3>
-                <h5 className="card-text text-center text-light mt-3 h2">${total}</h5>
+                <h3 className="card-text text-center mt-3"><i className="bi bi-cup-fill"></i>  {drink_name.split('&').join(' & ')}</h3>
+                <h3 className="card-text text-center mt-3"><i className="bi bi-palette-fill"></i>  {snack_name.split('&').join(' & ')}</h3>
+                <h5 className="card-text text-center mt-3 h2">${total}</h5>
             </div>
             <div className="d-flex justify-content-around">
-                {isPreview && <Link className="btn btn-info btn-lg rounded-pill" to={`/edit/${id}`}><i className="bi bi-pencil-fill"></i></Link>}
-                {isPreview && <button onClick={handleDelete} className="btn btn-info btn-lg rounded-pill"><i className="bi bi-x-circle-fill"></i></button>}
-                {is_finished && <button className="btn btn-info btn-lg rounded-pill" onClick={handleOrderComplete}><i className="bi bi-arrow-right-circle-fill"></i></button>}
+                {isPreview && <Link className="btn btn-light btn-lg rounded-pill" to={`/edit/${id}`}><i className="bi bi-pencil-fill"></i></Link>}
+                {isPreview && <button onClick={handleDelete} className="btn btn-light btn-lg rounded-pill"><i className="bi bi-x-circle-fill"></i></button>}
+                {is_finished && <button className="btn btn-light btn-lg rounded-pill" onClick={handleOrderComplete}><i className="bi bi-arrow-right-circle-fill"></i></button>}
             </div>
             <div className="d-flex justify-content-end">
-                {in_progress && <button className="btn btn-info rounded-pill btn-lg" onClick={handleViewOrder}><i className="bi bi-arrow-right-circle-fill"></i></button>}
+                {in_progress && <button className="btn btn-light rounded-pill btn-lg mx-3" onClick={handleViewOrder}><i className="bi bi-arrow-right-circle-fill"></i></button>}
             </div>
         </div>
     )
