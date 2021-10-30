@@ -31,14 +31,12 @@ const EditOrder = () => {
     useEffect(() => {
         apiService(`/api/orders/${id}`)
             .then(values => {
-                populate(values),
-                    console.log(values)
+                populate(values)
             });
     }, [id]);
     useEffect(() => {
         apiService(`/api/orders/${id}/join`)
             .then(order => {
-                console.log({ order });
                 setDrinkNames(order.splitDrinkNames);
                 setSnackNames(order.splitSnackNames);
                 setDrinkPrices(order.splitDrinkPrices);
@@ -90,9 +88,9 @@ const EditOrder = () => {
     // console.log({selectedDrinks, drink_ids, snack_ids});
     return (
         <>
-            <h1 className="text-light text-center display-4 mt-3"><i className="bi bi-cup-fill"></i> c^2 coffee </h1>
-            <form className="form-group bg-info border rounded p-2">
-                <label htmlFor="first_name" className="text-light mt-2 h3"><i className="bi bi-braces"></i></label>
+            <h1 className="text-center display-4 mt-3"><i className="bi bi-cup-fill"></i> c^2 coffee </h1>
+            <form className="form-group bg-light border rounded shadow-lg p-2">
+                <label htmlFor="first_name" className="mt-2 h3"><i className="bi bi-braces"></i></label>
                 <div className="d-flex justify-content-between">
                     <input
                         name="first_name"
@@ -101,9 +99,9 @@ const EditOrder = () => {
                         type="text"
                         className="form-control" />
                 </div>
-                <label htmlFor="email" className="text-light mt-2 h3"><i className="bi bi-cup-fill"></i></label>
+                <label htmlFor="email" className="mt-2 h3"><i className="bi bi-cup-fill"></i></label>
                 <div className="d-flex justify-content-between">
-                    <select className="form-select" name="drink_ids" value={snackValue} onChange={handleAddDrink}>
+                    <select className="form-select" name="drink_ids" value={drinkValue} onChange={handleAddDrink}>
                         <option value="0">add drink</option>
                         {drinks.map((values) => (
                             <option value={values.id} key={values.id}>
@@ -116,20 +114,20 @@ const EditOrder = () => {
                     <div className="d-flex justify-content-around">
                         <div className="d-inline">
                             {drinkNames.map(drinkName => (
-                                <li key={`drink-name-${drinkNames.indexOf(drinkName)}`} className="list-group-item border border-info rounded bg-info text-light">{drinkName}</li>
+                                <li key={`drink-name-${drinkNames.indexOf(drinkName)}`} className="list-group-item border border-light rounded bg-light ">{drinkName}</li>
                             ))}
                         </div>
                         <div className="d-inline">
                             {drinkPrices.map(drinkPrice => (
-                                <li key={`drink-price-${drinkPrices.indexOf(drinkPrice)}`} className="list-group-item border border-info rounded bg-info text-light"> ${drinkPrice}</li>
+                                <li key={`drink-price-${drinkPrices.indexOf(drinkPrice)}`} className="list-group-item border border-light rounded bg-light "> ${drinkPrice}</li>
                             ))}
                         </div>
                     </div>
                     {selectedDrinks.map(drink => {
-                        return <li key={`drink-item-${selectedDrinks.indexOf(drink)}`} className="list-group-item border border-info rounded bg-info text-light d-md-inline">{drink.name} ${drink.price}</li>
+                        return <li key={`drink-item-${selectedDrinks.indexOf(drink)}`} className="list-group-item border border-light rounded bg-light  d-md-inline">{drink.name} ${drink.price}</li>
                     })}
                 </ul>
-                <label htmlFor="password" className="text-light mt-2 h3"><i className="bi bi-palette-fill"></i></label>
+                <label htmlFor="password" className="mt-2 h3"><i className="bi bi-palette-fill"></i></label>
                 <div className="d-flex justify-content-between">
                     <select className="form-select" name="snack_ids" value={snackValue} onChange={handleAddSnack}>
                         <option value="0" >add snack</option>
@@ -144,21 +142,21 @@ const EditOrder = () => {
                     <div className="d-flex justify-content-around">
                         <div className="d-inline">
                             {snackNames.map(snackName => {
-                                return <li key={`snack-name-${snackNames.indexOf(snackName)}`} className="list-group-item border border-info rounded bg-info text-light">{snackName}</li>
+                                return <li key={`snack-name-${snackNames.indexOf(snackName)}`} className="list-group-item border border-light rounded bg-light ">{snackName}</li>
                             })}
                         </div>
                         <div className="d-inline">
                             {snackPrices.map(snackPrice => (
-                                <li key={`snack-price-${snackPrices.indexOf(snackPrice)}`} className="list-group-item border border-info rounded bg-info text-light"> ${snackPrice}</li>
+                                <li key={`snack-price-${snackPrices.indexOf(snackPrice)}`} className="list-group-item border border-light rounded bg-light "> ${snackPrice}</li>
                             ))}
                         </div>
                     </div>
                     {selectedSnacks.map(snack => {
-                        return <li key={`snack-item-${selectedSnacks.indexOf(snack)}`} className="list-group-item border border-info rounded bg-info text-light d-md-inline">{snack.name} ${snack.price}</li>
+                        return <li key={`snack-item-${selectedSnacks.indexOf(snack)}`} className="list-group-item border border-light rounded bg-light  d-md-inline">{snack.name} ${snack.price}</li>
                     })}
                 </ul>
                 <div className="d-flex justify-content-center mt-2">
-                    <button onClick={handleSubmit} disabled={disabledBtn} className="btn btn-info btn-lg rounded-pill"><i className="bi bi-arrow-right-circle-fill"></i></button>
+                    <button onClick={handleSubmit} disabled={disabledBtn} className="btn btn-light btn-lg rounded-pill"><i className="bi bi-arrow-right-circle-fill"></i></button>
                 </div>
             </form >
         </>
