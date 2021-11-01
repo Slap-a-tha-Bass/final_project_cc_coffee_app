@@ -19,6 +19,7 @@ import Payment from './views/Payment';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import Receipts from './views/Receipts';
+import FootBar from './components/FootBar';
 
 
 const stripe = loadStripe('pk_test_51JWlwbFmDISVkVU8c8Pfwiku0g2eXRukfDfdjNyW8336baPHPUwsYg4nm2kuUr4WzzXAgQEVr2k9VDTFN6HtaSHa00PBWeP8Nc');
@@ -55,9 +56,9 @@ const App = (props: AppProps) => {
 					<Route exact path="/register">
 						<Register />
 					</Route>
-					<Route exact path="/receipts">
+					<PrivateRoute exact path="/receipts">
 						<Receipts />
-					</Route>
+					</PrivateRoute>
 					<PrivateRoute exact path="/profile">
 						<Profile />
 					</PrivateRoute>
@@ -74,6 +75,7 @@ const App = (props: AppProps) => {
 						<Github />
 					</Route>
 				</Switch>
+				<FootBar />
 			</BrowserRouter>
 		</RootLayout>
 	);

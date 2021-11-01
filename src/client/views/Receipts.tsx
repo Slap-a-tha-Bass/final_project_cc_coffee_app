@@ -11,9 +11,10 @@ const Receipts = () => {
     }, [])
     return (
         <>
+            <h3 className="text-success text-center">receipts</h3>
             <div>
                 {receipts.map(receipt => (
-                    <ReceiptCard key={receipt.id} {...receipt} />
+                    <ReceiptCard key={`receipt-item-${receipt.id}`} {...receipt} />
                 ))}
             </div>
 

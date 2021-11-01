@@ -2,9 +2,9 @@ import React from 'react';
 import { Receipts } from '../../../types';
 import * as moment from 'moment';
 
-const ReceiptCard = ({ id, fullName, amount, receiptURL, _created }: Receipts) => {
+const ReceiptCard = ({ fullName, amount, receiptURL, _created }: Receipts) => {
     return (
-        
+
         <div className="card bg-light border rounded shadow-lg m-2">
             <div className="card-header h1">{fullName}</div>
             <div className="card-body">
