@@ -48,11 +48,11 @@ const EditOrder = () => {
         Swal.fire({
             title: 'Edit Order',
             icon: 'info',
-            iconColor: '#4b0492f6',
+            iconColor: '#000000',
             text: 'Please check to make sure everything looks good',
             showConfirmButton: true,
             confirmButtonText: 'Looks good!',
-            confirmButtonColor: '#4b0492f6',
+            confirmButtonColor: '#000000',
             showDenyButton: true,
             denyButtonText: 'Lemme double check!',
             denyButtonColor: '#ff0000'

@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { get_receipts, post_receipt } from '../../db/queries/receipts';
+import { delete_receipt, get_receipts, post_receipt } from '../../db/queries/receipts';
 const router = express.Router();
 
 
@@ -19,6 +19,15 @@ router.get('/', async (req, res) => {
         res.json(allReceipts);
     } catch (error) {
         res.status(500).json({ message: "Error getting receipts", error});
+    }
+});
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        await delete_receipt(Number(id));
+        res.json({ message: "Receipt deleted"})
+    } catch (error) {
+        res.status(500).json({ message: "Error deleting receipts", error});
     }
 })
 

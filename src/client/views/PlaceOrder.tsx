@@ -92,8 +92,8 @@ const PlaceOrder = () => {
                     </select>
                 </div>
                 <ul className="list-group list-group-flush">
-                    {selectedDrinks.map(drink => {
-                        return <li key={`drink-item-${drink.id}-${drink.price}`} className="list-group-item border border-light rounded bg-light  d-md-inline">{drink.name} ${drink.price}</li>
+                    {selectedDrinks.map((drink, index) => {
+                        return <li key={`drink-item-${index}`} className="list-group-item border border-light rounded bg-light  d-md-inline">{drink.name} ${drink.price}</li>
                     })}
                 </ul>
                 <label htmlFor="password" className=" mt-2 h3"><i className="bi bi-palette-fill"></i></label>
@@ -108,8 +108,8 @@ const PlaceOrder = () => {
                     </select>
                 </div>
                 <ul className="list-group list-group-flush">
-                    {selectedSnacks.map(snack => {
-                        return <li key={`snack-item-${snack.id}-${snack.price}`} className="list-group-item border border-light rounded bg-light ">{snack.name} ${snack.price}</li>
+                    {selectedSnacks.map((snack, index) => {
+                        return <li key={`snack-item-${index}`} className="list-group-item border border-light rounded bg-light ">{snack.name} ${snack.price}</li>
                     })}
                 </ul>
                 <div className="d-flex justify-content-center mt-2">

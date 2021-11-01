@@ -13,7 +13,7 @@ const Payment = () => {
     const [tip, setTip] = useState(0);
     const [grandTotal, setGrandTotal] = useState(0);
     const [hasLoaded, setHasLoaded] = useState(false);
-
+    const [isLoadingStripe, setIsLoadingStripe] = useState(false);
 
     const stripe = useStripe();
     const elements = useElements();
@@ -45,25 +45,32 @@ const Payment = () => {
             denyButtonColor: '#ff0000',
             denyButtonText: 'Cancel'
         }).then(async (results) => {
+            Swal.fire({
+                didOpen: () => { Swal.showLoading()}
+            });
             if (results.isConfirmed) {
-                const received = await apiService('/api/payment', 'POST', { amount: grandTotal, paymentMethod });
-                console.log(received),
-                    Swal.fire({
-                        title: 'Payment accepted!',
-                        icon: 'success',
-                        iconColor: '#000000',
-                        html: `<a target="_blank" href=${received.receiptURL}>view receipt</a>`,
-                        confirmButtonText: 'Got it',
-                        confirmButtonColor: '000000'
-                    }).then(res => {
-                        if(res.isConfirmed){
-                            apiService('/api/receipts', 'POST', { receiptURL: received.receiptURL, amount: grandTotal, fullName: values.fullName })
-                                .then(() => history.push('/placeorder'));
-                            apiService(`/api/orders/${id}`, 'DELETE', { first_name: values.first_name })
-                                .then(data => console.log({data}));
-                        }
-                    })
+                const received = await apiService('/api/payment', 'POST', { amount: grandTotal, paymentMethod })
+                console.log(received);
+                if (received) {
+                    Swal.hideLoading();
+                }
+                Swal.fire({
+                    title: 'Payment accepted!',
+                    icon: 'success',
+                    iconColor: '#000000',
+                    html: `<a target="_blank" href=${received.receiptURL}>view receipt</a>`,
+                    confirmButtonText: 'Got it',
+                    confirmButtonColor: '000000'
+                }).then(res => {
+                    if (res.isConfirmed) {
+                        apiService('/api/receipts', 'POST', { receiptURL: received.receiptURL, amount: grandTotal, fullName: values.fullName })
+                            .then(() => history.push('/placeorder'));
+                        apiService(`/api/orders/${id}`, 'DELETE', { first_name: values.first_name })
+                            .then(data => console.log({ data }));
+                    }
+                })
                 history.push('/orders')
+
             } else if (results.isDenied) {
                 return;
             }
