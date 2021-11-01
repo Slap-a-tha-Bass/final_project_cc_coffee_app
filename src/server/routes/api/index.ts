@@ -7,6 +7,7 @@ import drinksRouter from './drinks';
 import paymentRouter from './payment';
 import snacksorderRouter from './snacksorder';
 import drinksorderRouter from './drinksorder';
+import receiptsRouter from './receipts';
 
 const router = express.Router();
 
@@ -15,7 +16,9 @@ router.use('/users', passport.authenticate('jwt'), usersRouter);
 router.use('/snacks', passport.authenticate('jwt'), snacksRouter);
 router.use('/drinks', passport.authenticate('jwt'), drinksRouter);
 router.use('/payment', passport.authenticate('jwt'), paymentRouter);
-router.use('/snacksorder', snacksorderRouter);
-router.use('/drinksorder', drinksorderRouter);
+router.use('/snacksorder', passport.authenticate('jwt'), snacksorderRouter);
+router.use('/drinksorder', passport.authenticate('jwt'), drinksorderRouter);
+router.use('/receipts', passport.authenticate('jwt'), receiptsRouter);
+
 
 export default router;

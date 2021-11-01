@@ -57,7 +57,10 @@ const Payment = () => {
                         confirmButtonColor: '000000'
                     }).then(res => {
                         if(res.isConfirmed){
-                            
+                            apiService('/api/receipts', 'POST', { receiptURL: received.receiptURL, amount: grandTotal, fullName: values.fullName })
+                                .then(() => history.push('/placeorder'));
+                            apiService(`/api/orders/${id}`, 'DELETE', { first_name: values.first_name })
+                                .then(data => console.log({data}));
                         }
                     })
                 history.push('/orders')
@@ -118,7 +121,7 @@ const Payment = () => {
                 <label className="mt-2 h3" >full name</label>
                 <input
                     name="fullName"
-                    value={values.fullName || ''}
+                    value={values.fullName || values.first_name || ''}
                     onChange={handleChanges}
                     type="text"
                     placeholder='name as it appears on card'

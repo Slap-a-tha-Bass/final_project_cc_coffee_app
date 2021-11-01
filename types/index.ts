@@ -62,3 +62,10 @@ export interface PaymentProps {
     tip: number,
     subtotal: number
 }
+export interface Receipts {
+    id?: number,
+    receiptURL?: string,
+    amount?: number,
+    fullName?: string,
+    _created?: Date
+}
