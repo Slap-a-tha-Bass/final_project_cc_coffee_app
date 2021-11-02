@@ -22,7 +22,6 @@ const OrderCard = ({ id, first_name, drink_id, snack_id, price, isPreview, in_pr
                 setTotal(order.total)
             })
     }, [id]);
-    
     const handleViewOrder = (e: React.MouseEvent<HTMLButtonElement>) => {
         Swal.fire({
             title: `${first_name}'s order received!`,
@@ -72,11 +71,12 @@ const OrderCard = ({ id, first_name, drink_id, snack_id, price, isPreview, in_pr
             }
         })
     }
+
     return (
         <div className="card bg-light bg-gradient p-2 border rounded shadow-lg my-2">
             <h1 className="card-title text-center border-3 border-bottom border-dark mb-2"><i className="bi bi-braces"></i>  {first_name}</h1>
             <div className="card-body">
-                <h3 className="card-text text-center mt-3"><i className="bi bi-cup-fill"></i>  {drink_name.split('&').join(' & ')}</h3>
+                <h3 className="card-text text-center mt-3"><i className="bi bi-cup-fill"></i> {drink_name.split('&').join(' & ')}</h3>
                 <h3 className="card-text text-center mt-3"><i className="bi bi-palette-fill"></i>  {snack_name.split('&').join(' & ')}</h3>
                 <h5 className="card-text text-center mt-3 h2">${total}</h5>
             </div>

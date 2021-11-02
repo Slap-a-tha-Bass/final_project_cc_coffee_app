@@ -69,9 +69,6 @@ const EditOrder = () => {
         })
     }
     let disabledBtn = false;
-    if (!values.first_name || !selectedDrinks || !selectedSnacks) {
-        disabledBtn = true;
-    }
     const handleAddDrink = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const [filteredDrinkId] = drinks.filter(fd => fd.id === Number(e.target.value));
         setSelectedDrinks([...selectedDrinks, filteredDrinkId]);
@@ -85,6 +82,17 @@ const EditOrder = () => {
     const drink_ids = selectedDrinks.map(drink => drink.id);
     const snack_ids = selectedSnacks.map(snack => snack.id);
 
+    const clearDrinks = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        setSelectedDrinks([]);
+    }
+    const clearSnacks = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        setSelectedSnacks([]);
+    }
+    if (!values.first_name || !selectedDrinks || !selectedSnacks || selectedSnacks.length === 0 || selectedSnacks.length === 0 || drink_ids.length === 0 || snack_ids.length === 0) {
+        disabledBtn = true;
+    }
     // console.log({selectedDrinks, drink_ids, snack_ids});
     return (
         <>
@@ -110,21 +118,25 @@ const EditOrder = () => {
                         ))}
                     </select>
                 </div>
+                {/* button to clear drinks */}
+                <div className="d-flex justify-content-end">
+                    <button onClick={clearDrinks} className="btn btn-outline-light btn-sm text-danger">clear drinks</button>
+                </div>
                 <ul className="list-group list-group-flush">
-                    <div className="d-flex justify-content-around">
+                    <div className="d-flex justify-content-center">
                         <div className="d-inline">
-                            {drinkNames.map(drinkName => (
-                                <li key={`drink-name-${drinkNames.indexOf(drinkName)}`} className="list-group-item border border-light rounded bg-light ">{drinkName}</li>
+                            {drinkNames.map((drinkName, index) => (
+                                <li key={`drink-name-${index}`} className="list-group-item border border-light rounded bg-light text-success">{drinkName}</li>
                             ))}
                         </div>
                         <div className="d-inline">
-                            {drinkPrices.map(drinkPrice => (
-                                <li key={`drink-price-${drinkPrices.indexOf(drinkPrice)}`} className="list-group-item border border-light rounded bg-light "> ${drinkPrice}</li>
+                            {drinkPrices.map((drinkPrice, index) => (
+                                <li key={`drink-price-${index}`} className="list-group-item border border-light rounded bg-light text-success"> ${drinkPrice}</li>
                             ))}
                         </div>
                     </div>
-                    {selectedDrinks.map(drink => {
-                        return <li key={`drink-item-${selectedDrinks.indexOf(drink)}`} className="list-group-item border border-light rounded bg-light  d-md-inline">{drink.name} ${drink.price}</li>
+                    {selectedDrinks.map((drink, index) => {
+                        return <li key={`drink-item-${index}`} className="list-group-item border border-light rounded bg-light  d-md-inline">{drink.name} ${drink.price}</li>
                     })}
                 </ul>
                 <label htmlFor="password" className="mt-2 h3"><i className="bi bi-palette-fill"></i></label>
@@ -138,21 +150,25 @@ const EditOrder = () => {
                         ))}
                     </select>
                 </div>
+                {/* button to clear snacks */}
+                <div className="d-flex justify-content-end">
+                    <button onClick={clearSnacks} className="btn btn-outline-light btn-sm text-danger">clear snacks</button>
+                </div>
                 <ul className="list-group list-group-flush">
-                    <div className="d-flex justify-content-around">
+                    <div className="d-flex justify-content-center">
                         <div className="d-inline">
-                            {snackNames.map(snackName => {
-                                return <li key={`snack-name-${snackNames.indexOf(snackName)}`} className="list-group-item border border-light rounded bg-light ">{snackName}</li>
+                            {snackNames.map((snackName, index) => {
+                                return <li key={`snack-name-${index}`} className="list-group-item border border-light rounded bg-light text-success">{snackName}</li>
                             })}
                         </div>
                         <div className="d-inline">
-                            {snackPrices.map(snackPrice => (
-                                <li key={`snack-price-${snackPrices.indexOf(snackPrice)}`} className="list-group-item border border-light rounded bg-light "> ${snackPrice}</li>
+                            {snackPrices.map((snackPrice, index) => (
+                                <li key={`snack-price-${index}`} className="list-group-item border border-light rounded bg-light text-success"> ${snackPrice}</li>
                             ))}
                         </div>
                     </div>
-                    {selectedSnacks.map(snack => {
-                        return <li key={`snack-item-${selectedSnacks.indexOf(snack)}`} className="list-group-item border border-light rounded bg-light  d-md-inline">{snack.name} ${snack.price}</li>
+                    {selectedSnacks.map((snack, index)=> {
+                        return <li key={`snack-item-${index}`} className="list-group-item border border-light rounded bg-light">{snack.name} ${snack.price}</li>
                     })}
                 </ul>
                 <div className="d-flex justify-content-center mt-2">

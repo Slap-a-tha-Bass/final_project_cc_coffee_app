@@ -49,9 +49,6 @@ const PlaceOrder = () => {
         })
     }
     let disabledBtn = false;
-    if (!values.first_name || !selectedDrinks || !selectedSnacks) {
-        disabledBtn = true;
-    }
     const handleAddDrink = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const [filteredDrinkId] = drinks.filter(fd => fd.id === Number(e.target.value));
         setSelectedDrinks([...selectedDrinks, filteredDrinkId]);
@@ -65,6 +62,17 @@ const PlaceOrder = () => {
     const drink_ids = selectedDrinks.map(drink => drink.id);
     const snack_ids = selectedSnacks.map(snack => snack.id);
 
+    const clearDrinks = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        setSelectedDrinks([]);
+    }
+    const clearSnacks = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        setSelectedSnacks([]);
+    }
+    if (!values.first_name || !selectedDrinks || !selectedSnacks || selectedSnacks.length === 0 || selectedSnacks.length === 0 || drink_ids.length === 0 || snack_ids.length === 0) {
+        disabledBtn = true;
+    }
     // console.log({selectedDrinks, drink_ids, snack_ids});
     return (
         <>
@@ -80,10 +88,11 @@ const PlaceOrder = () => {
                         type="text"
                         className="form-control" />
                 </div>
+                {/* select for drinks */}
                 <label htmlFor="email" className=" mt-2 h3"><i className="bi bi-cup-fill"></i></label>
                 <div className="d-flex justify-content-between">
                     <select className="form-select" name="drink_ids" value={drinkValue} onChange={handleAddDrink}>
-                        <option value="0">add drink</option>
+                        <option value="0">add drink?</option>
                         {drinks.map((values) => (
                             <option value={values.id} key={values.id}>
                                 {values.name}  ${values.price}
@@ -91,15 +100,20 @@ const PlaceOrder = () => {
                         ))}
                     </select>
                 </div>
+                {/* button to clear drinks */}
+                <div className="d-flex justify-content-end">
+                    <button onClick={clearDrinks} className="btn btn-outline-light btn-sm text-danger">clear drinks</button>
+                </div>
                 <ul className="list-group list-group-flush">
                     {selectedDrinks.map((drink, index) => {
                         return <li key={`drink-item-${index}`} className="list-group-item border border-light rounded bg-light  d-md-inline">{drink.name} ${drink.price}</li>
                     })}
                 </ul>
+                {/* select for snacks */}
                 <label htmlFor="password" className=" mt-2 h3"><i className="bi bi-palette-fill"></i></label>
                 <div className="d-flex justify-content-between">
                     <select className="form-select" name="snack_ids" value={snackValue} onChange={handleAddSnack}>
-                        <option value="0" >add snack</option>
+                        <option value="0" >add snack?</option>
                         {snacks.map((values) => (
                             <option value={values.id} key={values.id}>
                                 {values.name}  ${values.price}
@@ -107,11 +121,16 @@ const PlaceOrder = () => {
                         ))}
                     </select>
                 </div>
+                {/* button to clear snacks */}
+                <div className="d-flex justify-content-end">
+                    <button onClick={clearSnacks} className="btn btn-outline-light btn-sm text-danger">clear snacks</button>
+                </div>
                 <ul className="list-group list-group-flush">
                     {selectedSnacks.map((snack, index) => {
                         return <li key={`snack-item-${index}`} className="list-group-item border border-light rounded bg-light ">{snack.name} ${snack.price}</li>
                     })}
                 </ul>
+                {/* button to submit order */}
                 <div className="d-flex justify-content-center mt-2">
                     <button onClick={handleSubmit} disabled={disabledBtn} className="btn btn-light btn-lg rounded-pill"><i className="bi bi-arrow-right-circle-fill"></i></button>
                 </div>
