@@ -13,7 +13,6 @@ const Payment = () => {
     const [tip, setTip] = useState(0);
     const [grandTotal, setGrandTotal] = useState(0);
     const [hasLoaded, setHasLoaded] = useState(false);
-    const [isLoadingStripe, setIsLoadingStripe] = useState(false);
 
     const stripe = useStripe();
     const elements = useElements();
@@ -88,29 +87,29 @@ const Payment = () => {
         apiService(`/api/orders/${id}/join`)
             .then(values => {
                 populate(values),
-                    setHasLoaded(true)
+                setHasLoaded(true)
             });
     }, [id]);
     useEffect(() => {
-        setGrandTotal(Number(values.total || 0) + tip)
-    }, [values.total, tip]);
+        setGrandTotal(Number(values.grandTotal || 0) + tip)
+    }, [values.grandTotal, tip]);
     const handle18 = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        const tip18 = (Number(values.total) * 0.18);
+        const tip18 = (Number(values.grandTotal) * 0.18);
         setTip(tip18);
     }
     const handle21 = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        const tip21 = (Number(values.total) * 0.21);
+        const tip21 = (Number(values.grandTotal) * 0.21);
         setTip(tip21);
     }
     const handle24 = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        const tip24 = (Number(values.total) * 0.24);
+        const tip24 = (Number(values.grandTotal) * 0.24);
         setTip(tip24);
     }
     const tipMouseOver = (e: React.MouseEvent<HTMLButtonElement>) => {
-        if (tip < (Number(values.total) * 0.05)) {
+        if (tip < (Number(values.grandTotal) * 0.05)) {
             Swal.fire({
                 title: `:'(`,
                 text: `C'mon, tip your barista!`,
@@ -136,14 +135,14 @@ const Payment = () => {
                 <label className="mt-2 h3" >subtotal</label>
                 <input
                     name="total"
-                    value={Number(values.total) || 0}
+                    value={Number(values.grandTotal) || 0}
                     onChange={handleChanges}
                     type="number"
                     className="form-control" />
                 <label className="mt-2 h6" >
-                    <button onClick={handle18} className="btn btn-light mx-3">tip %18 = ${(Number(values.total) * 0.18).toFixed(2)}</button>
-                    <button onClick={handle21} className="btn btn-light mx-3">tip %21 = ${(Number(values.total) * 0.21).toFixed(2)}</button>
-                    <button onClick={handle24} className="btn btn-light mx-3">tip %24 = ${(Number(values.total) * 0.24).toFixed(2)}</button>
+                    <button onClick={handle18} className="btn btn-light mx-3">tip %18 = ${(Number(values.grandTotal) * 0.18).toFixed(2)}</button>
+                    <button onClick={handle21} className="btn btn-light mx-3">tip %21 = ${(Number(values.grandTotal) * 0.21).toFixed(2)}</button>
+                    <button onClick={handle24} className="btn btn-light mx-3">tip %24 = ${(Number(values.grandTotal) * 0.24).toFixed(2)}</button>
                 </label>
                 <input
                     name="tip"

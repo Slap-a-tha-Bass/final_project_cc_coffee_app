@@ -12,12 +12,14 @@ CREATE TABLE DrinksOrder (
 	id INT AUTO_INCREMENT PRIMARY KEY,
     drink_id INT NOT NULL,
     FOREIGN KEY (drink_id) REFERENCES Drinks(id),
+    dr_quantity SMALLINT NOT NULL,
     order_id CHAR(36) NOT NULL,
+    CONSTRAINT dr_order_id
     FOREIGN KEY (order_id) REFERENCES Orders(id)
+    ON DELETE CASCADE
 );
 SELECT * FROM DrinksOrder;
-INSERT INTO Drinks (name, price) VALUES ('Lacroix', 3.00), ('Coke', 3.00);
-INSERT INTO Drinks (name, price) VALUES ('Water', 2), ('Latte', 3.50), ('Cortado', 3.50), ('Cappuccino', 4), ('Breve', 3.75), ('Americano', 3), ('Mocha', 4.50);
+INSERT INTO Drinks (name, price) VALUES ('No drink', 0.00), ('Water', 2), ('Latte', 3.50), ('Cortado', 3.50), ('Cappuccino', 4), ('Breve', 3.75), ('Americano', 3), ('Mocha', 4.50);
 SELECT * FROM Drinks;
 DROP TABLE IF EXISTS Snacks;
 CREATE TABLE Snacks (
@@ -30,12 +32,14 @@ CREATE TABLE SnacksOrder (
 	id INT AUTO_INCREMENT PRIMARY KEY,
     snack_id INT NOT NULL,
     FOREIGN KEY (snack_id) REFERENCES Snacks(id),
+    sn_quantity SMALLINT NOT NULL,
     order_id CHAR(36) NOT NULL,
-    FOREIGN KEY (order_id) REFERENCES Orders(id)
+    CONSTRAINT sn_order_id
+    FOREIGN KEY (order_id) REFERENCES Orders(id) 
+    ON DELETE CASCADE
 );
 SELECT * FROM SnacksOrder;
-INSERT INTO Snacks (name, price) VALUES ('Cake pop', 5.00);
-INSERT INTO Snacks (name, price) VALUES ('Panini', 7), ('Bagel', 3), ('Cookie', 2.50), ('Parfait', 4.50), ('Grits', 5), ('Crepe', 7.50), ('Omelette', 8);
+INSERT INTO Snacks (name, price) VALUES ('No snack', 0.00), ('Panini', 7), ('Bagel', 3), ('Cookie', 2.50), ('Parfait', 4.50), ('Grits', 5), ('Crepe', 7.50), ('Omelette', 8);
 DROP TABLE IF EXISTS Orders;
 CREATE TABLE Orders (
 	id CHAR(36) NOT NULL PRIMARY KEY,
@@ -45,7 +49,9 @@ CREATE TABLE Orders (
     in_progress TINYINT,
     is_finished TINYINT
 );
-SELECT o.id, GROUP_CONCAT(distinct d.name separator '&') as drink_names, GROUP_CONCAT(distinct s.name separator '&') as snack_names, GROUP_CONCAT(distinct d.price separator '&') as drink_prices, GROUP_CONCAT(distinct s.price separator '&') as snack_prices FROM Orders o JOIN SnacksOrder so ON o.id=so.order_id JOIN DrinksOrder do ON o.id=do.order_id JOIN Snacks s ON so.snack_id=s.id JOIN Drinks d ON do.drink_id=d.id GROUP BY o.id;
+SELECT o.id, GROUP_CONCAT(distinct d.name ORDER BY d.id separator '&') as drink_names, GROUP_CONCAT(distinct s.name separator '&') as snack_names, GROUP_CONCAT(distinct d.price ORDER BY d.id separator '&') as drink_prices, GROUP_CONCAT(distinct s.price separator '&') as snack_prices FROM Orders o JOIN SnacksOrder so ON o.id=so.order_id JOIN DrinksOrder do ON o.id=do.order_id JOIN Snacks s ON so.snack_id=s.id JOIN Drinks d ON do.drink_id=d.id GROUP BY o.id;
+SELECT o.id FROM Orders o JOIN DrinksOrder do ON o.id=do.order_id JOIN Drinks d ON do.drink_id=d.id GROUP BY o.id;
+SELECT o.id, do.dr_quantity, do.drink_id FROM Orders o JOIN DrinksOrder do ON o.id=do.order_id;
 DROP TABLE IF EXISTS Users;
 CREATE TABLE Users (
     id CHAR(36) NOT NULL PRIMARY KEY,
@@ -55,5 +61,18 @@ CREATE TABLE Users (
 	role VARCHAR(24) DEFAULT 'guest',
 	_created DATETIME DEFAULT NOW()
 );
+DROP TABLE IF EXISTS Receipts;
+CREATE TABLE Receipts (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    receiptURL VARCHAR(255) NOT NULL,
+    fullName VARCHAR(64) NOT NULL,
+    amount DECIMAL(5,2) NOT NULL,
+    _created DATETIME DEFAULT NOW()
+);
+SELECT * FROM Receipts;
 INSERT INTO Users (id, full_name, email, password) VALUES ('167569ad-fb47-4e98-8c2b-e7df60887d9f', 'Harry Potter', 'harry@test.com', '$2b$12$blWKGTT82XAzGvMjKVIyGe/Tj3AhHzi7znxD755DK4zy0OkXiQBp2');
 SELECT * FROM Users;
+-- Error Code: 1064. You have an error in your SQL syntax; check the manual that corresponds to 
+-- your MySQL server version for the right syntax to use near 
+-- 'ORDER BY d.id) as drink_names, GROUP_CONCAT(distinct s.name separator '&') as sn' at line 1
+

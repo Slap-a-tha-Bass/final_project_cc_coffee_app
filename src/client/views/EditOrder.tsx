@@ -19,6 +19,8 @@ const EditOrder = () => {
     const [snackNames, setSnackNames] = useState([]);
     const [drinkPrices, setDrinkPrices] = useState([]);
     const [snackPrices, setSnackPrices] = useState([]);
+    const [dr_quantity, setDrQuantity] = useState(1);
+    const [sn_quantity, setSnQuantity] = useState(1);
 
     useEffect(() => {
         apiService('/api/drinks')
@@ -58,10 +60,10 @@ const EditOrder = () => {
             denyButtonColor: '#ff0000'
         }).then((result) => {
             if (result.isConfirmed) {
-                apiService(`/api/orders/${id}`, 'PUT', { first_name: values.first_name, drink_ids: drink_ids, snack_ids: snack_ids })
+                apiService(`/api/orders/${id}`, 'PUT', { first_name: values.first_name, drink_ids: drink_ids, snack_ids: snack_ids, dr_quantity, sn_quantity })
                     .then(values => {
-                        console.log(values),
-                            history.push(`/orders`)
+                        console.log({values}),
+                        history.push(`/orders`)
                     });
             } else if (result.isDenied) {
                 return;
@@ -92,6 +94,22 @@ const EditOrder = () => {
     }
     if (!values.first_name || !selectedDrinks || !selectedSnacks || selectedSnacks.length === 0 || selectedSnacks.length === 0 || drink_ids.length === 0 || snack_ids.length === 0) {
         disabledBtn = true;
+    }
+    const handlePlusDrink = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        setDrQuantity(dr_quantity + 1);
+    }
+    const handleMinusDrink = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        setDrQuantity(dr_quantity - 1);
+    }
+    const handlePlusSnack = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        setSnQuantity(sn_quantity + 1);
+    }
+    const handleMinusSnack = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        setSnQuantity(sn_quantity - 1);
     }
     // console.log({selectedDrinks, drink_ids, snack_ids});
     return (
@@ -136,7 +154,17 @@ const EditOrder = () => {
                         </div>
                     </div>
                     {selectedDrinks.map((drink, index) => {
-                        return <li key={`drink-item-${index}`} className="list-group-item border border-light rounded bg-light  d-md-inline">{drink.name} ${drink.price}</li>
+                        return (
+                            <div key={`drink-item-${index}`} >
+                                <div className="d-flex justify-content-between">
+                                    <li className="list-group-item border border-light rounded bg-light">{`${drink.name} x${dr_quantity}`} ${drink.price * dr_quantity}</li>
+                                    <div className="d-flex">
+                                        <button onClick={handlePlusDrink} className="btn btn-light"><i className="bi bi-plus-circle-fill"></i></button>
+                                        <button onClick={handleMinusDrink} className="btn btn-light"><i className="bi bi-dash-circle-fill"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        )
                     })}
                 </ul>
                 <label htmlFor="password" className="mt-2 h3"><i className="bi bi-palette-fill"></i></label>
@@ -167,7 +195,7 @@ const EditOrder = () => {
                             ))}
                         </div>
                     </div>
-                    {selectedSnacks.map((snack, index)=> {
+                    {selectedSnacks.map((snack, index) => {
                         return <li key={`snack-item-${index}`} className="list-group-item border border-light rounded bg-light">{snack.name} ${snack.price}</li>
                     })}
                 </ul>

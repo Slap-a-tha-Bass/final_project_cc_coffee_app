@@ -8,18 +8,19 @@ const OrderCard = ({ id, first_name, drink_id, snack_id, price, isPreview, in_pr
     const history = useHistory();
     const [drink_name, setDrink_name] = useState<Drinks['name']>('');
     const [snack_name, setSnack_name] = useState<Snacks['name']>('');
-    const [drink_price, setDrink_price] = useState<Drinks['price']>();
-    const [snack_price, setSnack_price] = useState<Snacks['price']>();
     const [total, setTotal] = useState<Orders[]>();
+    const [dr_quantity, setDrQuantity] = useState();
+    const [sn_quantity, setSnQuantity] = useState();
 
     useEffect(() => {
         apiService(`/api/orders/${id}/join`)
             .then(order => {
                 setDrink_name(order.drinkNames),
                 setSnack_name(order.snackNames),
-                setDrink_price(order.drinkPrices),
-                setSnack_price(order.snackPrices),
-                setTotal(order.total)
+                setDrQuantity(order.quantities.dr_quantity),
+                setSnQuantity(order.quantities.sn_quantity),
+                setTotal(order.grandTotal),
+                console.log(order)
             })
     }, [id]);
     const handleViewOrder = (e: React.MouseEvent<HTMLButtonElement>) => {

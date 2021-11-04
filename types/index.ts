@@ -21,7 +21,9 @@ export interface Orders {
     in_progress?: boolean,
     is_finished?: boolean,
     order?: object,
-    tip?: number
+    tip?: number,
+    dr_quantity?: number,
+    sn_quantity?: number
 }
 export interface Drinks {
     id?: number,

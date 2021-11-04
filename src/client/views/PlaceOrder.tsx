@@ -10,9 +10,11 @@ const PlaceOrder = () => {
     const { values, handleChanges } = useForm();
     const [drinks, setDrinks] = useState<Drinks[]>([]);
     const [snacks, setSnacks] = useState<Snacks[]>([]);
+
     const [selectedDrinks, setSelectedDrinks] = useState([]);
-    const [drinkValue, setDrinkValue] = useState(0);
     const [selectedSnacks, setSelectedSnacks] = useState([]);
+
+    const [drinkValue, setDrinkValue] = useState(0);
     const [snackValue, setSnackValue] = useState(0);
     const [dr_quantity, setDrQuantity] = useState(1);
     const [sn_quantity, setSnQuantity] = useState(1);
@@ -66,10 +68,12 @@ const PlaceOrder = () => {
     const clearDrinks = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         setSelectedDrinks([]);
+        setDrQuantity(1);
     }
     const clearSnacks = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         setSelectedSnacks([]);
+        setSnQuantity(1);
     }
     let disabledBtn = false;
     if (!values.first_name || !selectedDrinks || !selectedSnacks || selectedSnacks.length === 0 || selectedSnacks.length === 0 || drink_ids.length === 0 || snack_ids.length === 0) {
@@ -93,7 +97,7 @@ const PlaceOrder = () => {
         setSnQuantity(sn_quantity - 1);
     }
 
-    console.log({selectedDrinks, drink_ids, snack_ids});
+    console.log({dr_quantity});
     return (
         <>
             <h1 className="text-center display-4 mt-3"><i className="bi bi-cup-fill"></i> c^2 coffee </h1>
@@ -119,34 +123,26 @@ const PlaceOrder = () => {
                             </option>
                         ))}
                     </select>
-                    <div className="d-flex align-items-center">
-                        {/* <div className="text-success mx-2">{dr_quantity}</div> */}
-                    </div>
-                    {/* <button onClick={handlePlusDrink} className="btn btn-light"><i className="bi bi-plus-circle-fill"></i></button>
-                    <button onClick={handleMinusDrink} className="btn btn-light"><i className="bi bi-dash-circle-fill"></i></button> */}
                 </div>
                 {/* button to clear drinks */}
                 <div className="d-flex justify-content-end">
                     <button onClick={clearDrinks} className="btn btn-outline-light btn-sm text-danger">clear drinks</button>
                 </div>
-                <div className="d-flex justify-content-between">
-                    <ul className="list-group list-group-flush">
-                        {selectedDrinks.map((drink, index) => {
-                            return (
-                                <div key={`drink-item-${index}`} >
-                                    <div className="d-flex justify-content-between">
-                                        <li className="list-group-item border border-light rounded bg-light">{`${drink.name} x${dr_quantity}`} ${drink.price * dr_quantity}</li>
-                                        <div className="d-flex">
-                                            <button onClick={handlePlusDrink} className="btn btn-light"><i className="bi bi-plus-circle-fill"></i></button>
-                                            <button onClick={handleMinusDrink} className="btn btn-light"><i className="bi bi-dash-circle-fill"></i></button>
-                                        </div>
+                <ul className="list-group list-group-flush">
+                    {selectedDrinks.map((drink, index) => {
+                        return (
+                            <div key={`drink-item-${index}`} >
+                                <div className="d-flex justify-content-between">
+                                    <li className="list-group-item border border-light rounded bg-light">{`${drink.name} x${dr_quantity}`} ${drink.price * dr_quantity}</li>
+                                    <div className="d-flex">
+                                        <button onClick={handlePlusDrink} className="btn btn-light"><i className="bi bi-plus-circle-fill"></i></button>
+                                        <button onClick={handleMinusDrink} className="btn btn-light"><i className="bi bi-dash-circle-fill"></i></button>
                                     </div>
                                 </div>
-                            )
-                        })}
-                    </ul>
-
-                </div>
+                            </div>
+                        )
+                    })}
+                </ul>
                 {/* select for snacks */}
                 <label htmlFor="password" className=" mt-2 h3"><i className="bi bi-palette-fill"></i></label>
                 <div className="d-flex justify-content-between">
@@ -170,7 +166,17 @@ const PlaceOrder = () => {
                 </div>
                 <ul className="list-group list-group-flush">
                     {selectedSnacks.map((snack, index) => {
-                        return <li key={`snack-item-${index}`} className="list-group-item border border-light rounded bg-light ">{snack.name} ${snack.price}</li>
+                        return (
+                            <div key={`snack-item-${index}`} >
+                                <div className="d-flex justify-content-between">
+                                    <li className="list-group-item border border-light rounded bg-light">{`${snack.name} x${sn_quantity}`} ${snack.price * sn_quantity}</li>
+                                    <div className="d-flex">
+                                        <button onClick={handlePlusSnack} className="btn btn-light"><i className="bi bi-plus-circle-fill"></i></button>
+                                        <button onClick={handleMinusSnack} className="btn btn-light"><i className="bi bi-dash-circle-fill"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        )
                     })}
                 </ul>
                 {/* button to submit order */}
