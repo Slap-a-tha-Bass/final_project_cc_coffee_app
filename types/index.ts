@@ -32,7 +32,8 @@ export interface DrinksOrder {
     id?: number,
     drink_id?: number,
     price?: number,
-    order_id?: string
+    order_id?: string,
+    dr_quantity?: number
 }
 export interface Snacks {
     id?: number,
@@ -43,7 +44,8 @@ export interface SnacksOrder {
     id?: number,
     snack_id?: number,
     price?: number,
-    order_id?: string
+    order_id?: string,
+    sn_quantity?: number
 }
 export interface Users {
     id?: string,

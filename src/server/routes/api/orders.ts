@@ -40,7 +40,7 @@ router.get('/:id/join', async (req, res) => {
     try {
         const [joinedDataByID] = await get_JOIN_everything_by_ID(id);
         const order = joinedDataByID;
-        console.log(order);
+        console.log({order});
         const total = [...order.drink_prices.split('&'), ...order.snack_prices.split('&')].map(price => 
             Number(price)).reduce((a,b) => (a+b)*1.09).toFixed(2);
         const drinkNames = order.drink_names;
@@ -57,28 +57,28 @@ router.get('/:id/join', async (req, res) => {
     }
 });
 router.post('/', async (req, res) => {
-    const { first_name, drink_ids, snack_ids } = req.body;
+    const { first_name, drink_ids, snack_ids, sn_quantity, dr_quantity } = req.body;
     try {
         const id = uuid_v4();
         const newOrder = { id, first_name };
         await post_order(newOrder);
 
         for await (const drink_id of drink_ids) {
-            const drinksOrder = { drink_id, order_id: id };
+            const drinksOrder = { drink_id, order_id: id, dr_quantity};
             await post_drinksorder(drinksOrder);
         }
         for await (const snack_id of snack_ids){
-            const snacksOrder = { snack_id, order_id: id };
+            const snacksOrder = { snack_id, order_id: id, sn_quantity };
             await post_snacksorder(snacksOrder);
         }
         res.json({ message: "Order created!", id });
     } catch (error) {
-        res.status(500).json({ message: "Error in server route", error: error.sqlMessage });
+        res.status(500).json({ message: "Error in server route", error });
     }
 });
 router.put('/:id', passport.authenticate('jwt'), async (req, res) => {
     const { id } = req.params;
-    const { first_name, drink_ids, snack_ids } = req.body;
+    const { first_name, drink_ids, snack_ids, dr_quantity, sn_quantity } = req.body;
     try {
         const editOrder = { id, first_name };
         await edit_order(editOrder , id);

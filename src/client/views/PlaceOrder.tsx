@@ -14,6 +14,8 @@ const PlaceOrder = () => {
     const [drinkValue, setDrinkValue] = useState(0);
     const [selectedSnacks, setSelectedSnacks] = useState([]);
     const [snackValue, setSnackValue] = useState(0);
+    const [dr_quantity, setDrQuantity] = useState(0);
+    const [sn_quantity, setSnQuantity] = useState(0);
 
     useEffect(() => {
         apiService('/api/drinks')
@@ -48,7 +50,6 @@ const PlaceOrder = () => {
             }
         })
     }
-    let disabledBtn = false;
     const handleAddDrink = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const [filteredDrinkId] = drinks.filter(fd => fd.id === Number(e.target.value));
         setSelectedDrinks([...selectedDrinks, filteredDrinkId]);
@@ -61,7 +62,7 @@ const PlaceOrder = () => {
     }
     const drink_ids = selectedDrinks.map(drink => drink.id);
     const snack_ids = selectedSnacks.map(snack => snack.id);
-
+    
     const clearDrinks = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         setSelectedDrinks([]);
@@ -70,9 +71,28 @@ const PlaceOrder = () => {
         e.preventDefault();
         setSelectedSnacks([]);
     }
+    let disabledBtn = false;
     if (!values.first_name || !selectedDrinks || !selectedSnacks || selectedSnacks.length === 0 || selectedSnacks.length === 0 || drink_ids.length === 0 || snack_ids.length === 0) {
         disabledBtn = true;
     }
+
+    const handlePlusDrink = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        setDrQuantity(dr_quantity + 1);
+    }
+    const handleMinusDrink = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        setDrQuantity(dr_quantity - 1);
+    }
+    const handlePlusSnack = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        setSnQuantity(sn_quantity + 1);
+    }
+    const handleMinusSnack = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        setSnQuantity(sn_quantity - 1);
+    }
+    console.log(dr_quantity)
     // console.log({selectedDrinks, drink_ids, snack_ids});
     return (
         <>
@@ -99,6 +119,11 @@ const PlaceOrder = () => {
                             </option>
                         ))}
                     </select>
+                    <div className="d-flex align-items-center">
+                        <div className="text-success mx-2">{dr_quantity}</div>
+                    </div>
+                    <button onClick={handlePlusDrink} className="btn btn-light"><i className="bi bi-plus-circle-fill"></i></button>
+                    <button onClick={handleMinusDrink} className="btn btn-light"><i className="bi bi-dash-circle-fill"></i></button>
                 </div>
                 {/* button to clear drinks */}
                 <div className="d-flex justify-content-end">
@@ -120,6 +145,11 @@ const PlaceOrder = () => {
                             </option>
                         ))}
                     </select>
+                    <div className="d-flex align-items-center">
+                        <div className="text-success mx-2">{sn_quantity}</div>
+                    </div>
+                    <button onClick={handlePlusSnack} className="btn btn-light"><i className="bi bi-plus-circle-fill"></i></button>
+                    <button onClick={handleMinusSnack} className="btn btn-light"><i className="bi bi-dash-circle-fill"></i></button>
                 </div>
                 {/* button to clear snacks */}
                 <div className="d-flex justify-content-end">

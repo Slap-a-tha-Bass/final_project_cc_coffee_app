@@ -1,5 +1,5 @@
 import { Query } from "..";
-import { DrinksOrder, Orders } from "../../../../types";
+import { DrinksOrder } from "../../../../types";
 
 export const get_drinksorder = () => Query<DrinksOrder[]>
     ('SELECT * FROM DrinksOrder JOIN Orders ON DrinksOrder.order_id = Orders.id');
