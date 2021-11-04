@@ -14,8 +14,8 @@ const PlaceOrder = () => {
     const [drinkValue, setDrinkValue] = useState(0);
     const [selectedSnacks, setSelectedSnacks] = useState([]);
     const [snackValue, setSnackValue] = useState(0);
-    const [dr_quantity, setDrQuantity] = useState(0);
-    const [sn_quantity, setSnQuantity] = useState(0);
+    const [dr_quantity, setDrQuantity] = useState(1);
+    const [sn_quantity, setSnQuantity] = useState(1);
 
     useEffect(() => {
         apiService('/api/drinks')
@@ -40,7 +40,7 @@ const PlaceOrder = () => {
             denyButtonColor: '#ff0000'
         }).then((result) => {
             if (result.isConfirmed) {
-                apiService('/api/orders', 'POST', { first_name: values.first_name, drink_ids: drink_ids, snack_ids: snack_ids })
+                apiService('/api/orders', 'POST', { first_name: values.first_name, drink_ids: drink_ids, snack_ids: snack_ids, dr_quantity, sn_quantity })
                     .then(values => {
                         console.log(values),
                             history.push(`/orders`)
@@ -62,7 +62,7 @@ const PlaceOrder = () => {
     }
     const drink_ids = selectedDrinks.map(drink => drink.id);
     const snack_ids = selectedSnacks.map(snack => snack.id);
-    
+
     const clearDrinks = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         setSelectedDrinks([]);
@@ -92,8 +92,8 @@ const PlaceOrder = () => {
         e.preventDefault();
         setSnQuantity(sn_quantity - 1);
     }
-    console.log(dr_quantity)
-    // console.log({selectedDrinks, drink_ids, snack_ids});
+
+    console.log({selectedDrinks, drink_ids, snack_ids});
     return (
         <>
             <h1 className="text-center display-4 mt-3"><i className="bi bi-cup-fill"></i> c^2 coffee </h1>
@@ -120,20 +120,33 @@ const PlaceOrder = () => {
                         ))}
                     </select>
                     <div className="d-flex align-items-center">
-                        <div className="text-success mx-2">{dr_quantity}</div>
+                        {/* <div className="text-success mx-2">{dr_quantity}</div> */}
                     </div>
-                    <button onClick={handlePlusDrink} className="btn btn-light"><i className="bi bi-plus-circle-fill"></i></button>
-                    <button onClick={handleMinusDrink} className="btn btn-light"><i className="bi bi-dash-circle-fill"></i></button>
+                    {/* <button onClick={handlePlusDrink} className="btn btn-light"><i className="bi bi-plus-circle-fill"></i></button>
+                    <button onClick={handleMinusDrink} className="btn btn-light"><i className="bi bi-dash-circle-fill"></i></button> */}
                 </div>
                 {/* button to clear drinks */}
                 <div className="d-flex justify-content-end">
                     <button onClick={clearDrinks} className="btn btn-outline-light btn-sm text-danger">clear drinks</button>
                 </div>
-                <ul className="list-group list-group-flush">
-                    {selectedDrinks.map((drink, index) => {
-                        return <li key={`drink-item-${index}`} className="list-group-item border border-light rounded bg-light  d-md-inline">{drink.name} ${drink.price}</li>
-                    })}
-                </ul>
+                <div className="d-flex justify-content-between">
+                    <ul className="list-group list-group-flush">
+                        {selectedDrinks.map((drink, index) => {
+                            return (
+                                <div key={`drink-item-${index}`} >
+                                    <div className="d-flex justify-content-between">
+                                        <li className="list-group-item border border-light rounded bg-light">{`${drink.name} x${dr_quantity}`} ${drink.price * dr_quantity}</li>
+                                        <div className="d-flex">
+                                            <button onClick={handlePlusDrink} className="btn btn-light"><i className="bi bi-plus-circle-fill"></i></button>
+                                            <button onClick={handleMinusDrink} className="btn btn-light"><i className="bi bi-dash-circle-fill"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </ul>
+
+                </div>
                 {/* select for snacks */}
                 <label htmlFor="password" className=" mt-2 h3"><i className="bi bi-palette-fill"></i></label>
                 <div className="d-flex justify-content-between">
@@ -148,8 +161,8 @@ const PlaceOrder = () => {
                     <div className="d-flex align-items-center">
                         <div className="text-success mx-2">{sn_quantity}</div>
                     </div>
-                    <button onClick={handlePlusSnack} className="btn btn-light"><i className="bi bi-plus-circle-fill"></i></button>
-                    <button onClick={handleMinusSnack} className="btn btn-light"><i className="bi bi-dash-circle-fill"></i></button>
+                    {/* <button onClick={handlePlusSnack} className="btn btn-light"><i className="bi bi-plus-circle-fill"></i></button>
+                    <button onClick={handleMinusSnack} className="btn btn-light"><i className="bi bi-dash-circle-fill"></i></button> */}
                 </div>
                 {/* button to clear snacks */}
                 <div className="d-flex justify-content-end">

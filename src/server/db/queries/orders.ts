@@ -17,7 +17,7 @@ export const get_JOIN_everything_by_ID = (id: string) => Query<Orders[]>
         GROUP_CONCAT(distinct d.name ORDER BY d.id  separator '&') as drink_names, 
         GROUP_CONCAT(distinct s.name ORDER BY s.id separator '&') as snack_names,
         GROUP_CONCAT(distinct d.price ORDER BY d.id separator '&') as drink_prices, 
-        GROUP_CONCAT(distinct s.price ORDER BY s.id separator '&') as snack_prices 
+        GROUP_CONCAT(distinct s.price ORDER BY s.id separator '&') as snack_prices
     FROM Orders o
         JOIN SnacksOrder so ON o.id=so.order_id 
         JOIN DrinksOrder do ON o.id=do.order_id 
