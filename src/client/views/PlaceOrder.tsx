@@ -52,6 +52,13 @@ const PlaceOrder = () => {
             }
         })
     }
+    // const handleSnackButton = (e: React.MouseEvent<HTMLButtonElement>) => {
+    //     e.preventDefault();
+    //     const [filteredSnackId] = snacks.filter(fs => fs.id === Number(e.target));
+    //     setSelectedSnacks([...selectedSnacks, filteredSnackId]);
+    //     setDrinkValue(0);
+    //     console.log({selectedSnacks, snack_ids});
+    // }
     const handleAddDrink = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const [filteredDrinkId] = drinks.filter(fd => fd.id === Number(e.target.value));
         setSelectedDrinks([...selectedDrinks, filteredDrinkId]);
@@ -97,7 +104,7 @@ const PlaceOrder = () => {
         setSnQuantity(sn_quantity - 1);
     }
 
-    console.log({dr_quantity});
+    console.log({ dr_quantity });
     return (
         <>
             <h1 className="text-center display-4 mt-3"><i className="bi bi-cup-fill"></i> c^2 coffee </h1>
@@ -154,12 +161,17 @@ const PlaceOrder = () => {
                             </option>
                         ))}
                     </select>
-                    <div className="d-flex align-items-center">
-                        <div className="text-success mx-2">{sn_quantity}</div>
-                    </div>
-                    {/* <button onClick={handlePlusSnack} className="btn btn-light"><i className="bi bi-plus-circle-fill"></i></button>
-                    <button onClick={handleMinusSnack} className="btn btn-light"><i className="bi bi-dash-circle-fill"></i></button> */}
                 </div>
+                {/* {snacks.map(snack => {
+                    return (
+                            <button name="snack_ids" value={values.id} onClick={handleSnackButton} key={snack.id} className="col-md-3 d-inline-block card border rounded shadow m-2">
+                                <h4 className="card-title text-center border-bottom py-3">{snack.name}</h4>
+                                <div className="card-body">
+                                    <h5 className="card-text text-center">${snack.price}</h5>
+                                </div>
+                            </button>                                                  
+                    )
+                })} */}
                 {/* button to clear snacks */}
                 <div className="d-flex justify-content-end">
                     <button onClick={clearSnacks} className="btn btn-outline-light btn-sm text-danger">clear snacks</button>

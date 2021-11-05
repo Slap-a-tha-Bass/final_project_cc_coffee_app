@@ -19,8 +19,7 @@ const OrderCard = ({ id, first_name, drink_id, snack_id, price, isPreview, in_pr
                 setSnack_name(order.snackNames),
                 setDrQuantity(order.quantities.dr_quantity),
                 setSnQuantity(order.quantities.sn_quantity),
-                setTotal(order.grandTotal),
-                console.log(order)
+                setTotal(order.grandTotal)
             })
     }, [id]);
     const handleViewOrder = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -77,8 +76,8 @@ const OrderCard = ({ id, first_name, drink_id, snack_id, price, isPreview, in_pr
         <div className="card bg-light bg-gradient p-2 border rounded shadow-lg my-2">
             <h1 className="card-title text-center border-3 border-bottom border-dark mb-2"><i className="bi bi-braces"></i>  {first_name}</h1>
             <div className="card-body">
-                <h3 className="card-text text-center mt-3"><i className="bi bi-cup-fill"></i> {drink_name.split('&').join(' & ')}</h3>
-                <h3 className="card-text text-center mt-3"><i className="bi bi-palette-fill"></i>  {snack_name.split('&').join(' & ')}</h3>
+                <h3 className="card-text text-center mt-3"><i className="bi bi-cup-fill"></i> {drink_name.split('&').join(' & ')} {dr_quantity === 1 ? '' : `x ${dr_quantity}`}</h3>
+                <h3 className="card-text text-center mt-3"><i className="bi bi-palette-fill"></i>  {snack_name.split('&').join(' & ')} {sn_quantity === 1 ? '' : `x ${sn_quantity}`}</h3>
                 <h5 className="card-text text-center mt-3 h2">${total}</h5>
             </div>
             <div className="d-flex justify-content-around">
