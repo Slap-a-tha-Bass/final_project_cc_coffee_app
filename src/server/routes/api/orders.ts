@@ -37,7 +37,9 @@ router.get('/:id/join', async (req, res) => {
     try {
         const tax= 1.09;
         const [order] = await get_JOIN_everything_by_ID(id);
-        const [quantities] = await get_JOIN_quantities(id);
+        const drink_id = order.drink_id;
+        const snack_id = order.snack_id;
+        const [quantities] = await get_JOIN_quantities(drink_id, snack_id);
         console.log({order, quantities});
         const total = [...order.drink_prices.split('&'), ...order.snack_prices.split('&')].map(price => 
             Number(price)).reduce((a,b) => (a+b)*1.09).toFixed(2);
@@ -65,19 +67,23 @@ router.get('/:id/join', async (req, res) => {
     }
 });
 router.post('/', async (req, res) => {
-    const { first_name, drink_ids, snack_ids, sn_quantity, dr_quantity } = req.body;
+    const { first_name, drink_ids, snack_ids, sn_quantities, dr_quantities } = req.body;
     try {
         const id = uuid_v4();
         const newOrder = { id, first_name };
         await post_order(newOrder);
 
         for await (const drink_id of drink_ids) {
-            const drinksOrder = { drink_id, order_id: id, dr_quantity};
-            await post_drinksorder(drinksOrder);
+            for await (const dr_quantity of dr_quantities){
+                const drinksOrder = { drink_id, order_id: id, dr_quantity};
+                await post_drinksorder(drinksOrder);
+            }
         }
         for await (const snack_id of snack_ids){
-            const snacksOrder = { snack_id, order_id: id, sn_quantity };
-            await post_snacksorder(snacksOrder);
+            for await (const sn_quantity of sn_quantities){
+                const snacksOrder = { snack_id, order_id: id, sn_quantity };
+                await post_snacksorder(snacksOrder);
+            }
         }
         res.json({ message: "Order created!", id });
     } catch (error) {

@@ -13,11 +13,13 @@ const PlaceOrder = () => {
 
     const [selectedDrinks, setSelectedDrinks] = useState([]);
     const [selectedSnacks, setSelectedSnacks] = useState([]);
+    const [selectedDrinkID, setSelectedDrinkID] = useState([]);
+    const [selectedSnackID, setSelectedSnackID] = useState([]);
 
     const [drinkValue, setDrinkValue] = useState(0);
     const [snackValue, setSnackValue] = useState(0);
-    const [dr_quantity, setDrQuantity] = useState(1);
-    const [sn_quantity, setSnQuantity] = useState(1);
+    const [dr_quantity, setDrQuantity] = useState(0);
+    const [sn_quantity, setSnQuantity] = useState(0);
 
     useEffect(() => {
         apiService('/api/drinks')
@@ -42,7 +44,7 @@ const PlaceOrder = () => {
             denyButtonColor: '#ff0000'
         }).then((result) => {
             if (result.isConfirmed) {
-                apiService('/api/orders', 'POST', { first_name: values.first_name, drink_ids: drink_ids, snack_ids: snack_ids, dr_quantity, sn_quantity })
+                apiService('/api/orders', 'POST', { first_name: values.first_name, drink_ids, snack_ids, dr_quantities, sn_quantities })
                     .then(values => {
                         console.log(values),
                             history.push(`/orders`)
@@ -66,11 +68,39 @@ const PlaceOrder = () => {
     }
     const handleAddSnack = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const [filteredSnackId] = snacks.filter(fs => fs.id === Number(e.target.value));
+        Swal.fire({
+            title: 'How many?',
+            icon: 'question',
+            showConfirmButton: true,
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonColor: '000000',
+            denyButtonColor: '000000',
+            cancelButtonColor: '000000',
+            confirmButtonText: `${Number('1')}`,
+            denyButtonText: `${Number('2')}`,
+            cancelButtonText: `${Number('3')}`
+        }).then(res => {
+            if (res.isConfirmed) {
+                setSnQuantity(1);
+                setSelectedSnackID([...selectedSnackID, dr_quantity])   
+            } else if (res.isDenied) {
+                setSnQuantity(2);
+                setSelectedSnackID([...selectedSnackID, dr_quantity])
+            } else if (res.isDismissed) {
+                setSnQuantity(3);
+                setSelectedSnackID([...selectedSnackID, dr_quantity])
+            }
+        })
         setSelectedSnacks([...selectedSnacks, filteredSnackId]);
         setSnackValue(0);
+        console.log({filteredSnackId, selectedSnackID, selectedSnacks})
     }
+    console.log({sn_quantity});
     const drink_ids = selectedDrinks.map(drink => drink.id);
     const snack_ids = selectedSnacks.map(snack => snack.id);
+    const dr_quantities = selectedDrinkID.map(drink => drink.dr_quantity);
+    const sn_quantities = selectedSnackID.map(snack => snack.sn_quantity);
 
     const clearDrinks = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -89,7 +119,7 @@ const PlaceOrder = () => {
 
     const handlePlusDrink = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        setDrQuantity(dr_quantity + 1);
+        const [filteredDrinkId] = drinks.filter(fd => fd.id === Number(e.target));
     }
     const handleMinusDrink = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -103,8 +133,6 @@ const PlaceOrder = () => {
         e.preventDefault();
         setSnQuantity(sn_quantity - 1);
     }
-
-    console.log({ dr_quantity });
     return (
         <>
             <h1 className="text-center display-4 mt-3"><i className="bi bi-cup-fill"></i> c^2 coffee </h1>
@@ -124,9 +152,9 @@ const PlaceOrder = () => {
                 <div className="d-flex justify-content-between">
                     <select className="form-select" name="drink_ids" value={drinkValue} onChange={handleAddDrink}>
                         <option value="0">add drink?</option>
-                        {drinks.map((values) => (
-                            <option value={values.id} key={values.id}>
-                                {values.name}  ${values.price}
+                        {drinks.map((drink) => (
+                            <option value={drink.id} key={drink.id}>
+                                {drink.name}  ${drink.price}
                             </option>
                         ))}
                     </select>
@@ -155,9 +183,9 @@ const PlaceOrder = () => {
                 <div className="d-flex justify-content-between">
                     <select className="form-select" name="snack_ids" value={snackValue} onChange={handleAddSnack}>
                         <option value="0" >add snack?</option>
-                        {snacks.map((values) => (
-                            <option value={values.id} key={values.id}>
-                                {values.name}  ${values.price}
+                        {snacks.map((snack) => (
+                            <option value={snack.id} key={snack.id}>
+                                {snack.name}  ${snack.price}
                             </option>
                         ))}
                     </select>
