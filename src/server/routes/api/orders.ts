@@ -10,8 +10,8 @@ import {
     get_JOIN_quantities
 } from '../../db/queries/orders';
 import { v4 as uuid_v4 } from 'uuid';
-import { post_drinksorder } from '../../db/queries/drinksorder';
-import { post_snacksorder } from '../../db/queries/snacksorder';
+import { get_one_drinksorder, post_drinksorder } from '../../db/queries/drinksorder';
+import { get_one_snacksorder, get_snacksorder, post_snacksorder } from '../../db/queries/snacksorder';
 
 const router = express.Router();
 
@@ -37,57 +37,64 @@ router.get('/:id/join', async (req, res) => {
     try {
         const tax= 1.09;
         const [order] = await get_JOIN_everything_by_ID(id);
-        const drink_id = order.drink_id;
-        const snack_id = order.snack_id;
-        const [quantities] = await get_JOIN_quantities(drink_id, snack_id);
-        console.log({order, quantities});
+        const drinks = await get_one_drinksorder(id);
+        const snacks = await get_one_snacksorder(id);
+        const drink_ids = drinks.map(drink => drink.drink_id);
+        const snack_ids = snacks.map(snack => snack.snack_id);
+        const drink_quantities = drinks.map(drink => drink.dr_quantity);
+        const snack_quantities = snacks.map(snack => snack.sn_quantity);
+        console.log({drinks, snacks});
+        console.log({order});
+        console.log({drink_ids, snack_ids});
+        console.log({drink_quantities, snack_quantities});
         const total = [...order.drink_prices.split('&'), ...order.snack_prices.split('&')].map(price => 
-            Number(price)).reduce((a,b) => (a+b)*1.09).toFixed(2);
+            Number(price)).reduce((a,b) => ((a)+(b))*1.09).toFixed(2);
         const drinkNames = order.drink_names;
         const splitDrinkNames = drinkNames.split('&');
         const snackNames = order.snack_names;
         const splitSnackNames = snackNames.split('&');
         const drinkPrices = order.drink_prices;
-        const splitDrinkPrices = drinkPrices.split('&').map(price => (Number(price)*quantities.dr_quantity).toFixed(2));
+        const splitDrinkPrices = drinkPrices.split('&').map(price => (Number(price)));
         const snackPrices = order.snack_prices;
-        const splitSnackPrices = snackPrices.split('&').map(price => (Number(price)*quantities.sn_quantity).toFixed(2));
+        const splitSnackPrices = snackPrices.split('&').map(price => (Number(price)));
 
-        const mapDrinkPrices = splitDrinkPrices.map(price => Number(price)).reduce((a,b) => (a+b)).toFixed(2);
-        const mapSnackPrices = splitSnackPrices.map(price => Number(price)).reduce((a,b) => (a+b)).toFixed(2);
+        const drinkPricing = drink_quantities.reduce(function(r,a,i){return r+a*splitDrinkPrices[i]},0)
+        const snackPricing = snack_quantities.reduce(function(r,a,i){return r+a*splitSnackPrices[i]},0)
+        console.log({drinkPricing, snackPricing})
+        const grandTotal = ((drinkPricing + snackPricing)*tax).toFixed(2);
 
-        const grandTotal = ((Number(mapDrinkPrices) + Number(mapSnackPrices))*tax).toFixed(2);
-        console.log({quantities});
 
         res.json({order, total, drinkNames, snackNames, 
-            drinkPrices, snackPrices, splitDrinkNames,  splitSnackNames, splitDrinkPrices, splitSnackPrices,
-            quantities, grandTotal
+            drinkPrices, snackPrices, splitDrinkNames,  splitSnackNames, splitDrinkPrices, splitSnackPrices, 
+            drinkPricing, snackPricing, grandTotal
         });
     } catch (error) {
+        console.log(error)
         res.status(500).json({ message: "Error in server route", error: error.sqlMessage });
     }
 });
 router.post('/', async (req, res) => {
-    const { first_name, drink_ids, snack_ids, sn_quantities, dr_quantities } = req.body;
+    const { first_name, drinks, snacks } = req.body;
     try {
         const id = uuid_v4();
         const newOrder = { id, first_name };
         await post_order(newOrder);
 
-        for await (const drink_id of drink_ids) {
-            for await (const dr_quantity of dr_quantities){
-                const drinksOrder = { drink_id, order_id: id, dr_quantity};
+        for await (const drink of drinks) {
+                const drinksOrder = {  order_id: id, drink_id: drink.drink_id, dr_quantity: drink.dr_quantity};
                 await post_drinksorder(drinksOrder);
-            }
+                console.log({drinksOrder});
         }
-        for await (const snack_id of snack_ids){
-            for await (const sn_quantity of sn_quantities){
-                const snacksOrder = { snack_id, order_id: id, sn_quantity };
+        for await (const snack of snacks){
+                const snacksOrder = { order_id: id, snack_id: snack.snack_id, sn_quantity: snack.sn_quantity };
                 await post_snacksorder(snacksOrder);
-            }
+                console.log({snacksOrder});
         }
-        res.json({ message: "Order created!", id });
+        
+        res.json({ message: "Order created!", id, drinks, snacks });
     } catch (error) {
-        res.status(500).json({ message: "Error in server route", error });
+        console.log(error);
+        res.status(500).json({ message: "Error in server route", error: error.sqlMessage });
     }
 });
 router.put('/:id', passport.authenticate('jwt'), async (req, res) => {
