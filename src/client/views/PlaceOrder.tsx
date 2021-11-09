@@ -13,8 +13,8 @@ const PlaceOrder = () => {
 
     const [selectedDrinks, setSelectedDrinks] = useState([]);
     const [selectedSnacks, setSelectedSnacks] = useState([]);
-    const [selectedDrinkID, setSelectedDrinkID] = useState([]);
-    const [selectedSnackID, setSelectedSnackID] = useState([]);
+    const [selectedDrinkQuantity, setSelectedDrinkQuantity] = useState([]);
+    const [selectedSnackQuantity, setSelectedSnackQuantity] = useState([]);
 
     const [drinkValue, setDrinkValue] = useState(0);
     const [snackValue, setSnackValue] = useState(0);
@@ -44,7 +44,7 @@ const PlaceOrder = () => {
             denyButtonColor: '#ff0000'
         }).then((result) => {
             if (result.isConfirmed) {
-                apiService('/api/orders', 'POST', { first_name: values.first_name, drink_ids, snack_ids, dr_quantities, sn_quantities })
+                apiService('/api/orders', 'POST', { first_name: values.first_name, drinks, snacks })
                     .then(values => {
                         console.log(values),
                             history.push(`/orders`)
@@ -65,52 +65,56 @@ const PlaceOrder = () => {
         const [filteredDrinkId] = drinks.filter(fd => fd.id === Number(e.target.value));
         setSelectedDrinks([...selectedDrinks, filteredDrinkId]);
         setDrinkValue(0);
+        console.log({selectedDrinks, dr_quantity});
     }
     const handleAddSnack = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const [filteredSnackId] = snacks.filter(fs => fs.id === Number(e.target.value));
-        Swal.fire({
-            title: 'How many?',
-            icon: 'question',
-            showConfirmButton: true,
-            showDenyButton: true,
-            showCancelButton: true,
-            confirmButtonColor: '000000',
-            denyButtonColor: '000000',
-            cancelButtonColor: '000000',
-            confirmButtonText: `${Number('1')}`,
-            denyButtonText: `${Number('2')}`,
-            cancelButtonText: `${Number('3')}`
-        }).then(res => {
-            if (res.isConfirmed) {
-                setSnQuantity(1);
-                setSelectedSnackID([...selectedSnackID, dr_quantity])   
-            } else if (res.isDenied) {
-                setSnQuantity(2);
-                setSelectedSnackID([...selectedSnackID, dr_quantity])
-            } else if (res.isDismissed) {
-                setSnQuantity(3);
-                setSelectedSnackID([...selectedSnackID, dr_quantity])
-            }
-        })
         setSelectedSnacks([...selectedSnacks, filteredSnackId]);
         setSnackValue(0);
-        console.log({filteredSnackId, selectedSnackID, selectedSnacks})
+        console.log({selectedSnacks, sn_quantity})
+        // Swal.fire({
+        //     title: 'How many?',
+        //     icon: 'question',
+        //     showConfirmButton: true,
+        //     showDenyButton: true,
+        //     showCancelButton: true,
+        //     confirmButtonColor: '000000',
+        //     denyButtonColor: '000000',
+        //     cancelButtonColor: '000000',
+        //     confirmButtonText: `${Number('1')}`,
+        //     denyButtonText: `${Number('2')}`,
+        //     cancelButtonText: `${Number('3')}`
+        // }).then(res => {
+        //     if (res.isConfirmed) {
+        //         setSnQuantity(1);
+        //         setSelectedSnackID([...selectedSnackID, dr_quantity])   
+        //     } else if (res.isDenied) {
+        //         setSnQuantity(2);
+        //         setSelectedSnackID([...selectedSnackID, dr_quantity])
+        //     } else if (res.isDismissed) {
+        //         setSnQuantity(3);
+        //         setSelectedSnackID([...selectedSnackID, dr_quantity])
+        //     }
+        // })
     }
     console.log({sn_quantity});
     const drink_ids = selectedDrinks.map(drink => drink.id);
     const snack_ids = selectedSnacks.map(snack => snack.id);
-    const dr_quantities = selectedDrinkID.map(drink => drink.dr_quantity);
-    const sn_quantities = selectedSnackID.map(snack => snack.sn_quantity);
 
     const clearDrinks = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         setSelectedDrinks([]);
-        setDrQuantity(1);
+        setDrQuantity(0);
     }
     const clearSnacks = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         setSelectedSnacks([]);
-        setSnQuantity(1);
+        setSnQuantity(0);
+    }
+    const confirmQuantity = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        setSelectedDrinkQuantity([...selectedDrinkQuantity, dr_quantity]);
+        console.log({selectedDrinkQuantity})
     }
     let disabledBtn = false;
     if (!values.first_name || !selectedDrinks || !selectedSnacks || selectedSnacks.length === 0 || selectedSnacks.length === 0 || drink_ids.length === 0 || snack_ids.length === 0) {
@@ -119,7 +123,7 @@ const PlaceOrder = () => {
 
     const handlePlusDrink = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        const [filteredDrinkId] = drinks.filter(fd => fd.id === Number(e.target));
+        setDrQuantity(dr_quantity + 1)
     }
     const handleMinusDrink = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -169,14 +173,19 @@ const PlaceOrder = () => {
                             <div key={`drink-item-${index}`} >
                                 <div className="d-flex justify-content-between">
                                     <li className="list-group-item border border-light rounded bg-light">{`${drink.name} x${dr_quantity}`} ${drink.price * dr_quantity}</li>
+                                    {selectedDrinkQuantity.map((quantity, index) => (
+                                        <li key={`quantity-${index}`} className="list-group-item border border-light rounded bg-light">{quantity}</li>
+                                    ))}
                                     <div className="d-flex">
                                         <button onClick={handlePlusDrink} className="btn btn-light"><i className="bi bi-plus-circle-fill"></i></button>
                                         <button onClick={handleMinusDrink} className="btn btn-light"><i className="bi bi-dash-circle-fill"></i></button>
                                     </div>
+                                    <button value={drinkValue} onClick={confirmQuantity} className="btn btn-success">confirm</button>
                                 </div>
                             </div>
                         )
                     })}
+                
                 </ul>
                 {/* select for snacks */}
                 <label htmlFor="password" className=" mt-2 h3"><i className="bi bi-palette-fill"></i></label>

@@ -57,7 +57,7 @@ router.get('/:id/join', async (req, res) => {
         const splitDrinkPrices = drinkPrices.split('&').map(price => (Number(price)));
         const snackPrices = order.snack_prices;
         const splitSnackPrices = snackPrices.split('&').map(price => (Number(price)));
-
+            console.log({splitDrinkPrices, splitSnackPrices});
         const drinkPricing = drink_quantities.reduce(function(r,a,i){return r+a*splitDrinkPrices[i]},0)
         const snackPricing = snack_quantities.reduce(function(r,a,i){return r+a*splitSnackPrices[i]},0)
         console.log({drinkPricing, snackPricing})

@@ -19,14 +19,14 @@ export const get_JOIN_quantities = (drink_id: number, snack_id: number) => Query
 
 export const get_JOIN_everything_by_ID = (id: string) => Query<Orders[]>
     (`SELECT o.id, 
-        GROUP_CONCAT(distinct d.name ORDER BY d.id  separator '&') as drink_names, 
-        GROUP_CONCAT(distinct s.name ORDER BY s.id separator '&') as snack_names,
-        GROUP_CONCAT(distinct d.price ORDER BY d.id separator '&') as drink_prices, 
-        GROUP_CONCAT(distinct s.price ORDER BY s.id separator '&') as snack_prices,
-        GROUP_CONCAT(distinct d.id separator '&') as drink_id,
-        GROUP_CONCAT(distinct do.dr_quantity ORDER BY d.id) as dr_quantity,
-        GROUP_CONCAT(distinct s.id separator '&') as snack_id,
-        GROUP_CONCAT(distinct so.sn_quantity ORDER BY s.id) as sn_quantity
+        GROUP_CONCAT(distinct d.name ORDER BY do.id  separator '&') as drink_names, 
+        GROUP_CONCAT(distinct s.name ORDER BY so.id separator '&') as snack_names,
+        GROUP_CONCAT(distinct d.price ORDER BY do.id separator '&') as drink_prices, 
+        GROUP_CONCAT(distinct s.price ORDER BY so.id separator '&') as snack_prices,
+        GROUP_CONCAT(distinct d.id ORDER BY do.id) as drink_id,
+        GROUP_CONCAT(distinct do.dr_quantity ORDER BY do.id) as dr_quantity,
+        GROUP_CONCAT(distinct s.id ORDER BY so.id) as snack_id,
+        GROUP_CONCAT(distinct so.sn_quantity ORDER BY so.id) as sn_quantity
         
     FROM Orders o
         JOIN SnacksOrder so ON o.id=so.order_id 
