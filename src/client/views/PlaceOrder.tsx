@@ -18,8 +18,11 @@ const PlaceOrder = () => {
 
     const [drinkValue, setDrinkValue] = useState(0);
     const [snackValue, setSnackValue] = useState(0);
-    const [dr_quantity, setDrQuantity] = useState(0);
-    const [sn_quantity, setSnQuantity] = useState(0);
+    const [dr_quantity, setDrQuantity] = useState(1);
+    const [sn_quantity, setSnQuantity] = useState(1);
+
+    const [hasSelectedDrink, setHasSelectedDrink] = useState(false);
+    const [hasSelectedSnack, setHasSelectedSnack] = useState(false);
 
     useEffect(() => {
         apiService('/api/drinks')
@@ -44,7 +47,7 @@ const PlaceOrder = () => {
             denyButtonColor: '#ff0000'
         }).then((result) => {
             if (result.isConfirmed) {
-                apiService('/api/orders', 'POST', { first_name: values.first_name, drinks, snacks })
+                apiService('/api/orders', 'POST', { first_name: values.first_name, drinks: concattedDrinkObject, snacks: concattedSnackObject })
                     .then(values => {
                         console.log(values),
                             history.push(`/orders`)
@@ -54,67 +57,52 @@ const PlaceOrder = () => {
             }
         })
     }
-    // const handleSnackButton = (e: React.MouseEvent<HTMLButtonElement>) => {
-    //     e.preventDefault();
-    //     const [filteredSnackId] = snacks.filter(fs => fs.id === Number(e.target));
-    //     setSelectedSnacks([...selectedSnacks, filteredSnackId]);
-    //     setDrinkValue(0);
-    //     console.log({selectedSnacks, snack_ids});
-    // }
     const handleAddDrink = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const [filteredDrinkId] = drinks.filter(fd => fd.id === Number(e.target.value));
         setSelectedDrinks([...selectedDrinks, filteredDrinkId]);
         setDrinkValue(0);
-        console.log({selectedDrinks, dr_quantity});
+        setHasSelectedDrink(true);
+        console.log({ selectedDrinks, dr_quantity });
     }
     const handleAddSnack = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const [filteredSnackId] = snacks.filter(fs => fs.id === Number(e.target.value));
         setSelectedSnacks([...selectedSnacks, filteredSnackId]);
         setSnackValue(0);
-        console.log({selectedSnacks, sn_quantity})
-        // Swal.fire({
-        //     title: 'How many?',
-        //     icon: 'question',
-        //     showConfirmButton: true,
-        //     showDenyButton: true,
-        //     showCancelButton: true,
-        //     confirmButtonColor: '000000',
-        //     denyButtonColor: '000000',
-        //     cancelButtonColor: '000000',
-        //     confirmButtonText: `${Number('1')}`,
-        //     denyButtonText: `${Number('2')}`,
-        //     cancelButtonText: `${Number('3')}`
-        // }).then(res => {
-        //     if (res.isConfirmed) {
-        //         setSnQuantity(1);
-        //         setSelectedSnackID([...selectedSnackID, dr_quantity])   
-        //     } else if (res.isDenied) {
-        //         setSnQuantity(2);
-        //         setSelectedSnackID([...selectedSnackID, dr_quantity])
-        //     } else if (res.isDismissed) {
-        //         setSnQuantity(3);
-        //         setSelectedSnackID([...selectedSnackID, dr_quantity])
-        //     }
-        // })
+        setHasSelectedSnack(true);
+        console.log({ selectedSnacks, sn_quantity })
     }
-    console.log({sn_quantity});
     const drink_ids = selectedDrinks.map(drink => drink.id);
     const snack_ids = selectedSnacks.map(snack => snack.id);
-
+    const arrayofDrinkObjects: any = [];
+    const concattedDrinkObject = arrayofDrinkObjects.concat({drink_id: drink_ids, dr_quantity: selectedDrinkQuantity});
+    const arrayofSnackObjects: any = [];
+    const concattedSnackObject = arrayofSnackObjects.concat({snack_id: snack_ids, sn_quantity: selectedSnackQuantity});
+    console.log({concattedDrinkObject, arrayofDrinkObjects});
     const clearDrinks = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         setSelectedDrinks([]);
-        setDrQuantity(0);
+        setSelectedDrinkQuantity([]);
+        setDrQuantity(1);
     }
     const clearSnacks = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         setSelectedSnacks([]);
-        setSnQuantity(0);
+        setSelectedSnackQuantity([]);
+        setSnQuantity(1);
     }
-    const confirmQuantity = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const confirmDrQuantity = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         setSelectedDrinkQuantity([...selectedDrinkQuantity, dr_quantity]);
-        console.log({selectedDrinkQuantity})
+        setDrQuantity(1);
+        setHasSelectedDrink(false);
+        console.log({ selectedDrinkQuantity })
+    }
+    const confirmSnQuantity = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        setSelectedSnackQuantity([...selectedSnackQuantity, sn_quantity]);
+        setSnQuantity(1);
+        setHasSelectedSnack(false);
+        console.log({ selectedSnackQuantity })
     }
     let disabledBtn = false;
     if (!values.first_name || !selectedDrinks || !selectedSnacks || selectedSnacks.length === 0 || selectedSnacks.length === 0 || drink_ids.length === 0 || snack_ids.length === 0) {
@@ -165,30 +153,38 @@ const PlaceOrder = () => {
                 </div>
                 {/* button to clear drinks */}
                 <div className="d-flex justify-content-end">
-                    <button onClick={clearDrinks} className="btn btn-outline-light btn-sm text-danger">clear drinks</button>
+                    <button onClick={clearDrinks} className="btn btn-outline-light btn-sm text-danger mt-1">clear drinks</button>
                 </div>
+                {/* buttons to add or subtract quantities */}
+                {hasSelectedDrink && <div className="d-flex justify-content-center align-items-center">
+                    <div className="mx-4">{dr_quantity}</div>
+                    <div className="mx-4">
+                        <button onClick={handlePlusDrink} className="btn btn-success bg-light text-success border border-light"><i className="bi bi-plus-circle-fill"></i></button>
+                        <button onClick={handleMinusDrink} className="btn btn-success bg-light text-success border border-light"><i className="bi bi-dash-circle-fill"></i></button>
+                    </div>
+                    <div className="d-flex align-items-center mx-4">
+                        <button onClick={confirmDrQuantity} className="btn btn-outline-success"><i className="bi bi-check-lg"></i></button>
+                    </div>
+                </div>}
                 <ul className="list-group list-group-flush">
                     {selectedDrinks.map((drink, index) => {
                         return (
                             <div key={`drink-item-${index}`} >
                                 <div className="d-flex justify-content-between">
-                                    <li className="list-group-item border border-light rounded bg-light">{`${drink.name} x${dr_quantity}`} ${drink.price * dr_quantity}</li>
-                                    {selectedDrinkQuantity.map((quantity, index) => (
-                                        <li key={`quantity-${index}`} className="list-group-item border border-light rounded bg-light">{quantity}</li>
-                                    ))}
-                                    <div className="d-flex">
-                                        <button onClick={handlePlusDrink} className="btn btn-light"><i className="bi bi-plus-circle-fill"></i></button>
-                                        <button onClick={handleMinusDrink} className="btn btn-light"><i className="bi bi-dash-circle-fill"></i></button>
-                                    </div>
-                                    <button value={drinkValue} onClick={confirmQuantity} className="btn btn-success">confirm</button>
+                                    <li className="list-group-item border border-light rounded bg-light">{`${drink.name}`}
+                                    </li>
                                 </div>
                             </div>
                         )
                     })}
-                
                 </ul>
+                {selectedDrinkQuantity.map((quantity, index) => (
+                    <div key={`quantity-${index}`} className="d-inline-block mx-3 text-success">{quantity}</div>
+                ))}
                 {/* select for snacks */}
-                <label htmlFor="password" className=" mt-2 h3"><i className="bi bi-palette-fill"></i></label>
+                <div>
+                    <label htmlFor="password" className=" mt-2 h3"><i className="bi bi-palette-fill"></i></label>
+                </div>
                 <div className="d-flex justify-content-between">
                     <select className="form-select" name="snack_ids" value={snackValue} onChange={handleAddSnack}>
                         <option value="0" >add snack?</option>
@@ -199,26 +195,27 @@ const PlaceOrder = () => {
                         ))}
                     </select>
                 </div>
-                {/* {snacks.map(snack => {
-                    return (
-                            <button name="snack_ids" value={values.id} onClick={handleSnackButton} key={snack.id} className="col-md-3 d-inline-block card border rounded shadow m-2">
-                                <h4 className="card-title text-center border-bottom py-3">{snack.name}</h4>
-                                <div className="card-body">
-                                    <h5 className="card-text text-center">${snack.price}</h5>
-                                </div>
-                            </button>                                                  
-                    )
-                })} */}
                 {/* button to clear snacks */}
                 <div className="d-flex justify-content-end">
-                    <button onClick={clearSnacks} className="btn btn-outline-light btn-sm text-danger">clear snacks</button>
+                    <button onClick={clearSnacks} className="btn btn-outline-light btn-sm text-danger mt-1">clear snacks</button>
                 </div>
+                {/* buttons to add or subtract quantities */}
+                {hasSelectedSnack && <div className="d-flex justify-content-center align-items-center">
+                    <div className="mx-4">{sn_quantity}</div>
+                    <div className="mx-4">
+                        <button onClick={handlePlusSnack} className="btn btn-success bg-light text-success border border-light"><i className="bi bi-plus-circle-fill"></i></button>
+                        <button onClick={handleMinusSnack} className="btn btn-success bg-light text-success border border-light"><i className="bi bi-dash-circle-fill"></i></button>
+                    </div>
+                    <div className="d-flex align-items-center mx-4">
+                        <button onClick={confirmSnQuantity} className="btn btn-outline-success"><i className="bi bi-check-lg"></i></button>
+                    </div>
+                </div>}
                 <ul className="list-group list-group-flush">
                     {selectedSnacks.map((snack, index) => {
                         return (
                             <div key={`snack-item-${index}`} >
                                 <div className="d-flex justify-content-between">
-                                    <li className="list-group-item border border-light rounded bg-light">{`${snack.name} x${sn_quantity}`} ${snack.price * sn_quantity}</li>
+                                    <li className="list-group-item border border-light rounded bg-light">{`${snack.name}`}</li>
                                     <div className="d-flex">
                                         <button onClick={handlePlusSnack} className="btn btn-light"><i className="bi bi-plus-circle-fill"></i></button>
                                         <button onClick={handleMinusSnack} className="btn btn-light"><i className="bi bi-dash-circle-fill"></i></button>
@@ -228,6 +225,9 @@ const PlaceOrder = () => {
                         )
                     })}
                 </ul>
+                {selectedSnackQuantity.map((quantity, index) => (
+                    <div key={`quantity-${index}`} className="d-inline-block mx-3 text-success">{quantity}</div>
+                ))}
                 {/* button to submit order */}
                 <div className="d-flex justify-content-center mt-2">
                     <button onClick={handleSubmit} disabled={disabledBtn} className="btn btn-light btn-lg rounded-pill"><i className="bi bi-arrow-right-circle-fill"></i></button>
