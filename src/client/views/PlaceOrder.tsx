@@ -23,6 +23,7 @@ const PlaceOrder = () => {
 
     const [hasSelectedDrink, setHasSelectedDrink] = useState(false);
     const [hasSelectedSnack, setHasSelectedSnack] = useState(false);
+    const [waitForQuantity, setWaitForQuantity] = useState(true);
 
     useEffect(() => {
         apiService('/api/drinks')
@@ -34,6 +35,17 @@ const PlaceOrder = () => {
     }, []);
     const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
+        if (selectedDrinks.length !== selectedDrinkQuantity.length) {
+            Swal.fire({
+                title: 'Oops!',
+                icon: 'error',
+                text: 'Make sure quantities match products chosen',
+                showConfirmButton: true,
+                confirmButtonText: 'Got it!'
+            }).then(res => {
+                return;
+            })
+        }
         Swal.fire({
             title: 'Review Order',
             icon: 'info',
@@ -41,13 +53,13 @@ const PlaceOrder = () => {
             text: 'Please check to make sure everything looks good',
             showConfirmButton: true,
             confirmButtonText: 'Looks good!',
-            confirmButtonColor: '#000000',
+            confirmButtonColor: '#5560ffe3',
             showDenyButton: true,
             denyButtonText: 'Lemme double check!',
             denyButtonColor: '#ff0000'
         }).then((result) => {
             if (result.isConfirmed) {
-                apiService('/api/orders', 'POST', { first_name: values.first_name, drinks: concattedDrinkObject, snacks: concattedSnackObject })
+                apiService('/api/orders', 'POST', { first_name: values.first_name, drinks: drinkObject, snacks: snackObject })
                     .then(values => {
                         console.log(values),
                             history.push(`/orders`)
@@ -62,6 +74,7 @@ const PlaceOrder = () => {
         setSelectedDrinks([...selectedDrinks, filteredDrinkId]);
         setDrinkValue(0);
         setHasSelectedDrink(true);
+        setWaitForQuantity(false);
         console.log({ selectedDrinks, dr_quantity });
     }
     const handleAddSnack = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -69,32 +82,47 @@ const PlaceOrder = () => {
         setSelectedSnacks([...selectedSnacks, filteredSnackId]);
         setSnackValue(0);
         setHasSelectedSnack(true);
+        setWaitForQuantity(false);
         console.log({ selectedSnacks, sn_quantity })
     }
     const drink_ids = selectedDrinks.map(drink => drink.id);
     const snack_ids = selectedSnacks.map(snack => snack.id);
-    const arrayofDrinkObjects: any = [];
-    const concattedDrinkObject = arrayofDrinkObjects.concat({drink_id: drink_ids, dr_quantity: selectedDrinkQuantity});
-    const arrayofSnackObjects: any = [];
-    const concattedSnackObject = arrayofSnackObjects.concat({snack_id: snack_ids, sn_quantity: selectedSnackQuantity});
-    console.log({concattedDrinkObject, arrayofDrinkObjects});
+
+    const drinkObject = selectedDrinks.map((drink, index) => {
+        return {
+            drink_id: drink.id,
+            dr_quantity: selectedDrinkQuantity[index]
+        }
+    });
+    const snackObject = selectedSnacks.map((snack, index) => {
+        return {
+            snack_id: snack.id,
+            sn_quantity: selectedSnackQuantity[index]
+        }
+    });
+    console.log({drinkObject, snackObject})
     const clearDrinks = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         setSelectedDrinks([]);
         setSelectedDrinkQuantity([]);
         setDrQuantity(1);
+        setHasSelectedDrink(false);
+        setWaitForQuantity(true);
     }
     const clearSnacks = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         setSelectedSnacks([]);
         setSelectedSnackQuantity([]);
         setSnQuantity(1);
+        setHasSelectedDrink(false);
+        setWaitForQuantity(true);
     }
     const confirmDrQuantity = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         setSelectedDrinkQuantity([...selectedDrinkQuantity, dr_quantity]);
         setDrQuantity(1);
         setHasSelectedDrink(false);
+        setWaitForQuantity(true);
         console.log({ selectedDrinkQuantity })
     }
     const confirmSnQuantity = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -102,12 +130,15 @@ const PlaceOrder = () => {
         setSelectedSnackQuantity([...selectedSnackQuantity, sn_quantity]);
         setSnQuantity(1);
         setHasSelectedSnack(false);
+        setWaitForQuantity(true);
         console.log({ selectedSnackQuantity })
     }
     let disabledBtn = false;
-    if (!values.first_name || !selectedDrinks || !selectedSnacks || selectedSnacks.length === 0 || selectedSnacks.length === 0 || drink_ids.length === 0 || snack_ids.length === 0) {
+    if (!values.first_name || !selectedDrinks || !selectedSnacks || selectedSnacks.length === 0 || selectedSnacks.length === 0 || drink_ids.length === 0 || snack_ids.length === 0 
+        || selectedDrinkQuantity.length === 0 || selectedSnackQuantity.length === 0) {
         disabledBtn = true;
     }
+ 
 
     const handlePlusDrink = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -125,6 +156,7 @@ const PlaceOrder = () => {
         e.preventDefault();
         setSnQuantity(sn_quantity - 1);
     }
+
     return (
         <>
             <h1 className="text-center display-4 mt-3"><i className="bi bi-cup-fill"></i> c^2 coffee </h1>
@@ -142,14 +174,14 @@ const PlaceOrder = () => {
                 {/* select for drinks */}
                 <label htmlFor="email" className=" mt-2 h3"><i className="bi bi-cup-fill"></i></label>
                 <div className="d-flex justify-content-between">
-                    <select className="form-select" name="drink_ids" value={drinkValue} onChange={handleAddDrink}>
+                    {waitForQuantity && <select className="form-select" name="drink_ids" value={drinkValue} onChange={handleAddDrink}>
                         <option value="0">add drink?</option>
                         {drinks.map((drink) => (
                             <option value={drink.id} key={drink.id}>
                                 {drink.name}  ${drink.price}
                             </option>
                         ))}
-                    </select>
+                    </select>}
                 </div>
                 {/* button to clear drinks */}
                 <div className="d-flex justify-content-end">
@@ -186,14 +218,14 @@ const PlaceOrder = () => {
                     <label htmlFor="password" className=" mt-2 h3"><i className="bi bi-palette-fill"></i></label>
                 </div>
                 <div className="d-flex justify-content-between">
-                    <select className="form-select" name="snack_ids" value={snackValue} onChange={handleAddSnack}>
+                    {waitForQuantity && <select className="form-select" name="snack_ids" value={snackValue} onChange={handleAddSnack}>
                         <option value="0" >add snack?</option>
                         {snacks.map((snack) => (
                             <option value={snack.id} key={snack.id}>
                                 {snack.name}  ${snack.price}
                             </option>
                         ))}
-                    </select>
+                    </select>}
                 </div>
                 {/* button to clear snacks */}
                 <div className="d-flex justify-content-end">

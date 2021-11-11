@@ -9,8 +9,8 @@ export interface Orders {
     id?: string,
     first_name?: string,
     price?: number,
-    drink_id?: number,
-    snack_id?: number,
+    drink_ids?: number,
+    snack_ids?: number,
     drink_prices?: string,
     snack_prices?: string,
     drink_names?: string,
@@ -22,8 +22,10 @@ export interface Orders {
     is_finished?: boolean,
     order?: object,
     tip?: number,
-    dr_quantity?: number,
-    sn_quantity?: number
+    drink_quantities?: number,
+    snack_quantities?: number,
+    drinkPricing?: number,
+    snackPricing?: number
 }
 export interface Drinks {
     id?: number,

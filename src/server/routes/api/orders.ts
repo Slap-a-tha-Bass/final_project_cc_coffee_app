@@ -43,12 +43,7 @@ router.get('/:id/join', async (req, res) => {
         const snack_ids = snacks.map(snack => snack.snack_id);
         const drink_quantities = drinks.map(drink => drink.dr_quantity);
         const snack_quantities = snacks.map(snack => snack.sn_quantity);
-        console.log({drinks, snacks});
-        console.log({order});
-        console.log({drink_ids, snack_ids});
-        console.log({drink_quantities, snack_quantities});
-        const total = [...order.drink_prices.split('&'), ...order.snack_prices.split('&')].map(price => 
-            Number(price)).reduce((a,b) => ((a)+(b))*1.09).toFixed(2);
+
         const drinkNames = order.drink_names;
         const splitDrinkNames = drinkNames.split('&');
         const snackNames = order.snack_names;
@@ -63,10 +58,9 @@ router.get('/:id/join', async (req, res) => {
         console.log({drinkPricing, snackPricing})
         const grandTotal = ((drinkPricing + snackPricing)*tax).toFixed(2);
 
-
-        res.json({order, total, drinkNames, snackNames, 
+        res.json({order, drinkNames, snackNames, 
             drinkPrices, snackPrices, splitDrinkNames,  splitSnackNames, splitDrinkPrices, splitSnackPrices, 
-            drinkPricing, snackPricing, grandTotal
+            drinkPricing, snackPricing, grandTotal, drink_quantities, snack_quantities, drink_ids, snack_ids
         });
     } catch (error) {
         console.log(error)
