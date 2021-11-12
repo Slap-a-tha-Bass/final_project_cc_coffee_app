@@ -53,7 +53,7 @@ const PlaceOrder = () => {
             text: 'Please check to make sure everything looks good',
             showConfirmButton: true,
             confirmButtonText: 'Looks good!',
-            confirmButtonColor: '#5560ffe3',
+            confirmButtonColor: '#000000',
             showDenyButton: true,
             denyButtonText: 'Lemme double check!',
             denyButtonColor: '#ff0000'
@@ -71,14 +71,18 @@ const PlaceOrder = () => {
     }
     const handleAddDrink = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const [filteredDrinkId] = drinks.filter(fd => fd.id === Number(e.target.value));
+        const newDrinksArray = drinks.filter(fd => fd.id !== Number(e.target.value));
+        setDrinks(newDrinksArray);
         setSelectedDrinks([...selectedDrinks, filteredDrinkId]);
         setDrinkValue(0);
         setHasSelectedDrink(true);
         setWaitForQuantity(false);
-        console.log({ selectedDrinks, dr_quantity });
+        console.log({ selectedDrinks, filteredDrinkId });
     }
     const handleAddSnack = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const [filteredSnackId] = snacks.filter(fs => fs.id === Number(e.target.value));
+        const newSnacksArray = snacks.filter(fd => fd.id !== Number(e.target.value));
+        setDrinks(newSnacksArray);
         setSelectedSnacks([...selectedSnacks, filteredSnackId]);
         setSnackValue(0);
         setHasSelectedSnack(true);
@@ -189,13 +193,13 @@ const PlaceOrder = () => {
                 </div>
                 {/* buttons to add or subtract quantities */}
                 {hasSelectedDrink && <div className="d-flex justify-content-center align-items-center">
-                    <div className="mx-4">{dr_quantity}</div>
+                    <div className="mx-4 text-muted">{dr_quantity}</div>
                     <div className="mx-4">
-                        <button onClick={handlePlusDrink} className="btn btn-success bg-light text-success border border-light"><i className="bi bi-plus-circle-fill"></i></button>
-                        <button onClick={handleMinusDrink} className="btn btn-success bg-light text-success border border-light"><i className="bi bi-dash-circle-fill"></i></button>
+                        <button onClick={handlePlusDrink} className="btn btn-muted bg-light text-muted border border-light"><i className="bi bi-plus-circle-fill"></i></button>
+                        <button onClick={handleMinusDrink} className="btn btn-muted bg-light text-muted border border-light"><i className="bi bi-dash-circle-fill"></i></button>
                     </div>
                     <div className="d-flex align-items-center mx-4">
-                        <button onClick={confirmDrQuantity} className="btn btn-outline-success"><i className="bi bi-check-lg"></i></button>
+                        <button onClick={confirmDrQuantity} className="btn btn-outline-muted"><i className="bi bi-check-lg"></i></button>
                     </div>
                 </div>}
                 <ul className="list-group list-group-flush">
@@ -211,7 +215,7 @@ const PlaceOrder = () => {
                     })}
                 </ul>
                 {selectedDrinkQuantity.map((quantity, index) => (
-                    <div key={`quantity-${index}`} className="d-inline-block mx-3 text-success">{quantity}</div>
+                    <div key={`quantity-${index}`} className="d-inline-block mx-3 text-muted">{quantity}</div>
                 ))}
                 {/* select for snacks */}
                 <div>
@@ -233,13 +237,13 @@ const PlaceOrder = () => {
                 </div>
                 {/* buttons to add or subtract quantities */}
                 {hasSelectedSnack && <div className="d-flex justify-content-center align-items-center">
-                    <div className="mx-4">{sn_quantity}</div>
+                    <div className="mx-4 text-muted">{sn_quantity}</div>
                     <div className="mx-4">
-                        <button onClick={handlePlusSnack} className="btn btn-success bg-light text-success border border-light"><i className="bi bi-plus-circle-fill"></i></button>
-                        <button onClick={handleMinusSnack} className="btn btn-success bg-light text-success border border-light"><i className="bi bi-dash-circle-fill"></i></button>
+                        <button onClick={handlePlusSnack} className="btn btn-muted bg-light text-muted border border-light"><i className="bi bi-plus-circle-fill"></i></button>
+                        <button onClick={handleMinusSnack} className="btn btn-muted bg-light text-muted border border-light"><i className="bi bi-dash-circle-fill"></i></button>
                     </div>
                     <div className="d-flex align-items-center mx-4">
-                        <button onClick={confirmSnQuantity} className="btn btn-outline-success"><i className="bi bi-check-lg"></i></button>
+                        <button onClick={confirmSnQuantity} className="btn btn-outline-muted"><i className="bi bi-check-lg"></i></button>
                     </div>
                 </div>}
                 <ul className="list-group list-group-flush">
@@ -248,17 +252,13 @@ const PlaceOrder = () => {
                             <div key={`snack-item-${index}`} >
                                 <div className="d-flex justify-content-between">
                                     <li className="list-group-item border border-light rounded bg-light">{`${snack.name}`}</li>
-                                    <div className="d-flex">
-                                        <button onClick={handlePlusSnack} className="btn btn-light"><i className="bi bi-plus-circle-fill"></i></button>
-                                        <button onClick={handleMinusSnack} className="btn btn-light"><i className="bi bi-dash-circle-fill"></i></button>
-                                    </div>
                                 </div>
                             </div>
                         )
                     })}
                 </ul>
                 {selectedSnackQuantity.map((quantity, index) => (
-                    <div key={`quantity-${index}`} className="d-inline-block mx-3 text-success">{quantity}</div>
+                    <div key={`quantity-${index}`} className="d-inline-block mx-3 text-muted">{quantity}</div>
                 ))}
                 {/* button to submit order */}
                 <div className="d-flex justify-content-center mt-2">
