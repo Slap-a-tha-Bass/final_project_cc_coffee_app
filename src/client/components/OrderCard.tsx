@@ -72,8 +72,8 @@ const OrderCard = ({ id, first_name, isPreview, in_progress, is_finished }: Orde
             }
         })
     }
-    const convertDrQuantities = [drink_quantities].toString().split(',').join(`______x`);
-    const convertSnQuantities = [snack_quantities].toString().split(',').join(`______x`);
+    const convertDrQuantities = [drink_quantities].toString().split(',').join(` , x`);
+    const convertSnQuantities = [snack_quantities].toString().split(',').join(` , x`);
     return (
         <div className="card bg-light bg-gradient p-2 border rounded shadow-lg my-2">
             <h1 className="card-title text-center border-3 border-bottom border-dark mb-2"><i className="bi bi-braces"></i>  {first_name}</h1>
@@ -86,7 +86,6 @@ const OrderCard = ({ id, first_name, isPreview, in_progress, is_finished }: Orde
                 <h5 className="card-text text-center mt-3 h2">${total}</h5>
             </div>
             <div className="d-flex justify-content-around">
-                {isPreview && <Link className="btn btn-light btn-lg rounded-pill" to={`/edit/${id}`}><i className="bi bi-pencil-fill"></i></Link>}
                 {isPreview && <button onClick={handleDelete} className="btn btn-light btn-lg rounded-pill"><i className="bi bi-x-circle-fill"></i></button>}
                 {is_finished && <button className="btn btn-light btn-lg rounded-pill" onClick={handleOrderComplete}><i className="bi bi-arrow-right-circle-fill"></i></button>}
             </div>

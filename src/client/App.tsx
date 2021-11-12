@@ -14,7 +14,6 @@ import Register from './views/Register';
 import ViewOrder from './views/ViewOrder';
 import Twitter from './views/social_media/Twitter';
 import Github from './views/social_media/Github';
-import EditOrder from './views/EditOrder';
 import Payment from './views/Payment';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
@@ -46,9 +45,6 @@ const App = (props: AppProps) => {
 						<Elements stripe={stripe}>
 							<Payment />
 						</Elements>
-					</Route>
-					<Route exact path="/edit/:id">
-						<EditOrder />
 					</Route>
 					<Route exact path="/login">
 						<Login />
