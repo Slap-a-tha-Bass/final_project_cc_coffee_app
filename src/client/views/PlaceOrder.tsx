@@ -112,6 +112,8 @@ const PlaceOrder = () => {
         setDrQuantity(1);
         setHasSelectedDrink(false);
         setWaitForQuantity(true);
+        apiService('/api/drinks')
+            .then(data => setDrinks(data));
     }
     const clearSnacks = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -120,6 +122,8 @@ const PlaceOrder = () => {
         setSnQuantity(1);
         setHasSelectedDrink(false);
         setWaitForQuantity(true);
+        apiService('/api/snacks')
+            .then(data => setSnacks(data));
     }
     const confirmDrQuantity = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();

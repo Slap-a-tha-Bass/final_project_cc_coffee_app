@@ -41,6 +41,7 @@ CREATE TABLE SnacksOrder (
 SELECT * FROM SnacksOrder;
 INSERT INTO Snacks (name, price) VALUES ('No snack', 0.00), ('Panini', 7), ('Bagel', 3), ('Cookie', 2.50), ('Parfait', 4.50), ('Grits', 5), ('Crepe', 7.50), ('Omelette', 8);
 DROP TABLE IF EXISTS Orders;
+SELECT * FROM Orders;
 CREATE TABLE Orders (
 	id CHAR(36) NOT NULL PRIMARY KEY,
     first_name VARCHAR(24) NOT NULL, 
@@ -49,9 +50,24 @@ CREATE TABLE Orders (
     in_progress TINYINT,
     is_finished TINYINT
 );
-SELECT o.id, GROUP_CONCAT(distinct d.name ORDER BY d.id separator '&') as drink_names, GROUP_CONCAT(distinct s.name separator '&') as snack_names, GROUP_CONCAT(distinct d.price ORDER BY d.id separator '&') as drink_prices, GROUP_CONCAT(distinct s.price separator '&') as snack_prices FROM Orders o JOIN SnacksOrder so ON o.id=so.order_id JOIN DrinksOrder do ON o.id=do.order_id JOIN Snacks s ON so.snack_id=s.id JOIN Drinks d ON do.drink_id=d.id GROUP BY o.id;
+SELECT o.id, 
+		GROUP_CONCAT(distinct d.name ORDER BY d.id separator '&') as drink_names, 
+		GROUP_CONCAT(distinct s.name ORDER BY s.id separator '&') as snack_names, 
+		GROUP_CONCAT(distinct d.price ORDER BY d.id separator '&') as drink_prices, 
+		GROUP_CONCAT(distinct s.price ORDER BY s.id separator  '&') as snack_prices,
+		GROUP_CONCAT(distinct do.drink_id separator '&') as drink_id,
+        GROUP_CONCAT(distinct do.dr_quantity ORDER BY do.drink_id) as dr_quantity,
+        GROUP_CONCAT(distinct so.snack_id separator '&') as snack_id,
+        GROUP_CONCAT(distinct so.sn_quantity ORDER BY so.snack_id) as sn_quantity 
+FROM Orders o 
+        JOIN SnacksOrder so ON o.id=so.order_id 
+        JOIN DrinksOrder do ON o.id=do.order_id 
+        JOIN Snacks s ON so.snack_id=s.id 
+        JOIN Drinks d ON do.drink_id=d.id GROUP BY o.id;
+        
 SELECT o.id FROM Orders o JOIN DrinksOrder do ON o.id=do.order_id JOIN Drinks d ON do.drink_id=d.id GROUP BY o.id;
-SELECT o.id, do.dr_quantity, do.drink_id FROM Orders o JOIN DrinksOrder do ON o.id=do.order_id;
+SELECT o.id, do.drink_id, do.dr_quantity FROM Orders o JOIN DrinksOrder do ON o.id=do.order_id;
+SELECT o.id, do.drink_id, do.dr_quantity, so.snack_id, so.sn_quantity FROM Orders o JOIN DrinksOrder do ON o.id=do.order_id JOIN SnacksOrder so ON o.id=so.order_id;
 DROP TABLE IF EXISTS Users;
 CREATE TABLE Users (
     id CHAR(36) NOT NULL PRIMARY KEY,
@@ -72,7 +88,11 @@ CREATE TABLE Receipts (
 SELECT * FROM Receipts;
 INSERT INTO Users (id, full_name, email, password) VALUES ('167569ad-fb47-4e98-8c2b-e7df60887d9f', 'Harry Potter', 'harry@test.com', '$2b$12$blWKGTT82XAzGvMjKVIyGe/Tj3AhHzi7znxD755DK4zy0OkXiQBp2');
 SELECT * FROM Users;
--- Error Code: 1064. You have an error in your SQL syntax; check the manual that corresponds to 
--- your MySQL server version for the right syntax to use near 
--- 'ORDER BY d.id) as drink_names, GROUP_CONCAT(distinct s.name separator '&') as sn' at line 1
+DROP TABLE IF EXISTS tokens;
+CREATE TABLE tokens (
+	id CHAR(36) PRIMARY KEY,
+	_created DATETIME DEFAULT NOW(),
+    _expires DATETIME,
+    is_used TINYINT DEFAULT 0
+);
 
