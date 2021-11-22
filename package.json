@@ -5,7 +5,7 @@
   "main": "dist/server.js",
   "scripts": {
     "watch:build": "webpack -w",
-    "build" : "webpack",
+    "build": "webpack",
     "watch:server": "nodemon dist/server.js",
     "dev": "npm-run-all --parallel watch:*",
     "start": "node dist/server.js"
@@ -31,6 +31,7 @@
     "bcrypt": "^5.0.1",
     "bootstrap": "^5.1.1",
     "bootstrap-icons": "^1.6.0",
+    "cors": "^2.8.5",
     "css-loader": "^6.3.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
